@@ -1,0 +1,31 @@
+body{
+    display: flex;
+    background-color: black;
+    text-align: center;
+    justify-content: center;
+    height: 100%;
+    width: 100%;
+}
+
+section{
+    display: flex;
+    flex-direction: row;
+    flex-wrap: wrap;
+    align-items: center;
+    justify-content: space-between;
+    width: 33%;
+    height: 33%;
+}
+div{
+    width: 100px;
+    height: 200px;
+}
+img{
+    max-height: 100%;
+    max-width: 100%;
+}
+
+#credits-balance {
+    color: black;
+    background-color: white;
+}
