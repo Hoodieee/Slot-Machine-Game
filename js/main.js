@@ -56,14 +56,13 @@ const images =
 ];
 
 
-const payoutLookup =[ 5, 10, 20, 50, 100, 200];
-
+const payoutLookup =[ 5, 10, 20, 50, 100, 200, 2, 5, 1, 1, 1];
 init();
 
 function init() {
     imgNum = 0;
     bet = 1;
-    win = 0;
+    win = null;
     balance = 100;
     displayBalance();
     displayBet();
@@ -177,7 +176,7 @@ function spin() {
     balance -= bet;
     displayBalance();
     setTimeout(checkWin, 3000);
-    win = 0;
+    win = null;
 
 }
 
@@ -189,37 +188,37 @@ function displayBet() {
 }
 
 function checkWin () {
-    if (imgOne === imgFour && imgFour === imgSeven){
-        winAmt = payoutLookup[imgOne];
+    if (imgOne === imgFour && imgFour === imgSeven){ //top row straight across
+        if(bet === 5 && imgOne === 5 && imgTen === 8){ //jackpot
+            winAmt = payoutLookup[imgTwo] * 1500;
+        }else if(bet === 5) {
+        winAmt = payoutLookup[imgOne] * payoutLookup[imgTen];
+        }else winAmount = payoutLook[imgOne];
     }
-    else if (imgTwo === imgFive && imgFive === imgEight){
-        winAmt = payoutLookup[imgTwo];
+    else if (imgTwo === imgFive && imgFive === imgEight){ // middle row straight across
+        if(bet === 5 && imgTwo === 5 && imgEleven === 8){
+        winAmt = payoutLookup[imgTwo] * payoutLookup[imgEleven];
+        }
     }
-    else if (imgThree === imgSix && imgSix === imgNine){
-        winAmt = payoutLookup[imgThree];
+    else if (imgThree === imgSix && imgSix === imgNine){ // bottom row straight across
+        winAmt = payoutLookup[imgThree] * payoutLookup[imgTwelve];
     }
-    else if (imgOne === imgFive && imgFive=== imgNine){
-        winAmt = payoutLookup[imgOne];
+    else if (imgOne === imgFive && imgFive=== imgNine){ // diagonal top left to bottom right
+        winAmt = payoutLookup[imgOne] * payoutLookup[imgTwelve];
     }
-    else if (imgThree === imgFive && imgFive === imgSeven){
-        winAmt = payoutLookup[imgThree];
+    else if (imgThree === imgFive && imgFive === imgSeven){ // diagonal bottom lect to to top right
+        winAmt = payoutLookup[imgThree] * payoutLookup[imgTen];
     }
-    else if (imgOne === imgFive && imgFive === imgSeven){
-        winAmt = payoutLookup[imgOne];
+    else if (imgOne === imgFive && imgFive === imgSeven){ // zig zag top
+        winAmt = payoutLookup[imgOne] * payoutLookup[imgTen];
     }
-    else if (imgThree === imgFive && imgFive === imgNine){
-        winAmt = payoutLookup[imgThree];
+    else if (imgThree === imgFive && imgFive === imgNine){ // zig zag bottom
+        winAmt = payoutLookup[imgThree] * payoutLookup[imgTwelve];
     }
     else if (win === null) return;
 
-    win = payoutLookup[winAmt] * bet;
+    win = winAmt * bet;
     console.log(`You win ${win} credits!`)
     balance += win;
     displayBalance();
-}
-
-
-function scroll() {
-    imgNum < 6 ? imgNum++ : imgNum = 0;
-        imgNum++;
     }

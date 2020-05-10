@@ -24,12 +24,13 @@ section{
     width: 100%;
     display: flex;
     flex-direction: column;
+    justify-content: space-between;
   }
   #top-lights {
     display: flex;
     flex-direction: row;
     justify-content: space-between;
-    align-content: flex-start;
+    align-content: flex-end;
     width: 100%
   }
   #bottom-lights {
@@ -55,6 +56,10 @@ section{
   }
   #left-lights{
     grid-area: left;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-content: flex-start;
   }
   #top-console{
     display: flex;
@@ -64,11 +69,10 @@ section{
     font-size: 50px;
   }
   #right-lights{
-    display: flex;
-    flex-direction: column;
     grid-area: right;
-    justify-content: space-around;
-    align-items: flex-end;
+    display: flex;
+    justify-content: flex-end;
+    align-content: center;
   }
 
 .scrolls{
@@ -83,13 +87,14 @@ section{
 
 #game{
     background-color: gray;
+    background-image: radial-gradient(gray , white);
     border: 4px solid black;
     display: flex;
     flex-wrap: wrap;
     height: 30%;
-    width: 100wh;
+    width: 100%;
     align-content: center;
-    justify-content: space-around;
+    justify-content: space-around;;
 }
 
 #credits-balance {
