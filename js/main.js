@@ -2,14 +2,35 @@
 let imgOne;
 let imgTwo;
 let imgThree;
+let imgFour;
+let imgFive;
+let imgSix;
+let imgSeven;
+let imgEight;
+let imgNine;
+let imgTen;
+let imgEleven;
+let imgTwelve;
 let imgNum;
+
 let bet;
 let balance;
 let win;
+let winAmt;
 
-const divOneEl = document.getElementById('one');
-const divTwoEl = document.getElementById('two');
-const divThreeEl = document.getElementById('three');
+const divOneEl = document.getElementById('slot-one');
+const divTwoEl = document.getElementById('slot-two');
+const divThreeEl = document.getElementById('slot-three');
+const divFourEl = document.getElementById('slot-four');
+const divFiveEl = document.getElementById('slot-five');
+const divSixEl = document.getElementById('slot-six');
+const divSevenEl = document.getElementById('slot-seven');
+const divEightEl = document.getElementById('slot-eight');
+const divNineEl = document.getElementById('slot-nine');
+const divTenEl = document.getElementById('slot-ten');
+const divElevenEl = document.getElementById('slot-eleven');
+const divTwelveEl = document.getElementById('slot-twelve');
+
 const divBalance = document.getElementById('credits-balance');
 const divBetAmt = document.getElementById('bet-amount');
 
@@ -20,14 +41,23 @@ const divBetAmt = document.getElementById('bet-amount');
 document.getElementById('bet').addEventListener('click', betting)
 document.getElementById('spin').addEventListener('click', spin);
 
-const images = {
-    '0': '<img src="https://i.imgur.com/qaM8dQJ.jpg">',
-    '1': '<img src="https://i.imgur.com/WhfcQUd.jpg">',
-    '2': '<img src="https://i.imgur.com/OFGdd8u.jpg">',
-    '3': '<img src="https://i.imgur.com/5z65Py2.jpg">',
-    '4': '<img src="https://i.imgur.com/YhS7iWm.jpg">',
-    '5': '<img src="https://i.imgur.com/9yXUu1f.jpg">'
-}
+const images =
+    ['<img src="https://i.imgur.com/6Ts68im.jpg">',
+    '<img src="https://i.imgur.com/YI8snM7.jpg">',
+    '<img src="https://i.imgur.com/iZIom8z.jpg">',
+    '<img src="https://i.imgur.com/3txHJ7q.jpg">',
+    '<img src="https://i.imgur.com/QXB5wUJ.jpg">',
+    '<img src="https://i.imgur.com/b6DgvoY.jpg">',
+    '<img src="https://i.imgur.com/HTrVlD7.jpg">',
+    '<img src="https://i.imgur.com/6SAON7s.jpg">',
+    '<img src="https://i.imgur.com/QyZNaNu.jpg">',
+    '<img src="https://i.imgur.com/5Er6hxm.jpg">',
+    '<img src="https://i.imgur.com/5Er6hxm.jpg">'
+];
+
+
+const payoutLookup =[ 5, 10, 20, 50, 100, 200];
+
 init();
 
 function init() {
@@ -39,65 +69,103 @@ function init() {
     displayBet();
 }
 
-
-function imgNumGen() { // goes through imgNum 0-1-2-3-4-5 to show a smooth scrolling effect
-    imgNum = Math.floor(Math.random() * 6)
-}
-
-function randomNumGen() {
-    Math.floor(Math.random() + 1) //returns a value of 1,2, or 3
-}
-
-// function randomIntervalGen() {
-//     let intVal = randomNumGen()
-//     if(intVal === 1) return 20;
-//     if(intVal === 2) return 40;
-//     if(intVal === 3) return 60;
-
-// }
 function betting() {
     (bet < 5) ? bet++ : bet =1;
     displayBet();
 }
 
 function imgOneGen(){ // displays an image on slot 1 depending on the value of imgNum
-    imgNumGen();
-    imgOne = imgNum
-    divOneEl.innerHTML = images[imgOne];
-    
+    imgOne = Math.floor(Math.random() * 6)
+    divOneEl.innerHTML = images[imgOne];   
 }
-
 function imgTwoGen(){ // displays an image on slot 2 depending on the value of imgNum
-    imgNumGen();
-    imgTwo = imgNum
+    imgTwo = Math.floor(Math.random() * 6)
     divTwoEl.innerHTML = images[imgTwo];
 }
-
 function imgThreeGen(){ // displays an image on slot 3 depending on the value of imgNum
-    imgNumGen();
-    imgThree = imgNum
+    imgThree = Math.floor(Math.random() * 6)
     divThreeEl.innerHTML = images[imgThree];
 }
+function imgFourGen(){ // displays an image on slot 3 depending on the value of imgNum
+    imgFour = Math.floor(Math.random() * 6)
+    divFourEl.innerHTML = images[imgFour];
+}
+function imgFiveGen(){ // displays an image on slot 3 depending on the value of imgNum
+    imgFive = Math.floor(Math.random() * 6)
+    divFiveEl.innerHTML = images[imgFive];
+}
+function imgSixGen(){ // displays an image on slot 3 depending on the value of imgNum
+    imgSix = Math.floor(Math.random() * 6)
+    divSixEl.innerHTML = images[imgSix];
+}
+function imgSevenGen(){ // displays an image on slot 3 depending on the value of imgNum
+    imgSeven = Math.floor(Math.random() * 6)
+    divSevenEl.innerHTML = images[imgSeven];
+}
+function imgEightGen(){ // displays an image on slot 3 depending on the value of imgNum
+    imgEight = Math.floor(Math.random() * 6)
+    divEightEl.innerHTML = images[imgEight];
+}
+function imgNineGen(){ // displays an image on slot 3 depending on the value of imgNum
+    imgNine = Math.floor(Math.random() * 6)
+    divNineEl.innerHTML = images[imgNine];
+}
+function imgTenGen(){ // displays an image on slot 3 depending on the value of imgNum
+    imgTen = Math.floor(Math.random() * 4) + 7;
+    divTenEl.innerHTML = images[imgTen];
+}
+function imgElevenGen(){ // displays an image on slot 3 depending on the value of imgNum
+    imgEleven = Math.floor(Math.random() * 4) + 7;
+    divElevenEl.innerHTML = images[imgEleven];
+}
+function imgTwelveGen(){ // displays an image on slot 3 depending on the value of imgNum
+    imgTwelve = Math.floor(Math.random() * 4) + 7;
+    divTwelveEl.innerHTML = images[imgTwelve];
+}
+
 
 function scrollOne() {
-    const scrollTimerOne= setInterval(imgOneGen, 60);
+    const scrollTimerOne= setInterval(function() {
+        imgOneGen();
+        imgTwoGen();
+        imgThreeGen();
+    }, 60);
     setTimeout(function(){
         clearInterval(scrollTimerOne);
     }, 2000);    
 }
 
 function scrollTwo() {
-    const scrollTimerTwo= setInterval(imgTwoGen, 50);
+    const scrollTimerTwo= setInterval(function() {
+        imgFourGen();
+        imgFiveGen();
+        imgSixGen();
+    }, 50);
     setTimeout(function(){
         clearInterval(scrollTimerTwo);
     }, 2500);
 }
 
 function scrollThree() {
-    const scrollTimerThree= setInterval(imgThreeGen, 40);
+    const scrollTimerThree= setInterval(function() {
+        imgSevenGen();
+        imgEightGen();
+        imgNineGen();
+    }, 40);
     setTimeout(function(){
         clearInterval(scrollTimerThree);
     }, 3000);
+    
+}
+function scrollFour() {
+    const scrollTimerFour= setInterval(function() {
+        imgTenGen();
+        imgElevenGen();
+        imgTwelveGen();
+    }, 40);
+    setTimeout(function(){
+        clearInterval(scrollTimerFour);
+    }, 3500);
     
 }
 
@@ -105,6 +173,7 @@ function spin() {
     scrollOne();
     scrollTwo();
     scrollThree();
+    scrollFour();
     balance -= bet;
     displayBalance();
     setTimeout(checkWin, 3000);
@@ -120,20 +189,34 @@ function displayBet() {
 }
 
 function checkWin () {
-    if (imgOne === imgTwo && imgTwo === imgThree && imgThree === imgOne){
-    win = 10 * bet;
-    console.log("You Win!!");
+    if (imgOne === imgFour && imgFour === imgSeven){
+        winAmt = payoutLookup[imgOne];
+    }
+    else if (imgTwo === imgFive && imgFive === imgEight){
+        winAmt = payoutLookup[imgTwo];
+    }
+    else if (imgThree === imgSix && imgSix === imgNine){
+        winAmt = payoutLookup[imgThree];
+    }
+    else if (imgOne === imgFive && imgFive=== imgNine){
+        winAmt = payoutLookup[imgOne];
+    }
+    else if (imgThree === imgFive && imgFive === imgSeven){
+        winAmt = payoutLookup[imgThree];
+    }
+    else if (imgOne === imgFive && imgFive === imgSeven){
+        winAmt = payoutLookup[imgOne];
+    }
+    else if (imgThree === imgFive && imgFive === imgNine){
+        winAmt = payoutLookup[imgThree];
+    }
+    else if (win === null) return;
+
+    win = payoutLookup[winAmt] * bet;
+    console.log(`You win ${win} credits!`)
     balance += win;
     displayBalance();
-    }
 }
-// const winPayout {
-//     '0': 5,
-//     '1': 10,
-//     '2': 20,
-//     '3': 50,
-//     '4': 100,
-//     '
 
 
 function scroll() {
