@@ -1,37 +1,24 @@
-//Variables
-
-// Hold Values for each slot
-
-
-let imgNum;
-
+//Global Variables
 let bet;
 let balance;
 let win;
 let winAmt;
 let totalBet;
 let playLine;
-let winTop;
-let winMid;
-let winBot;
-let winDiaOne;
-let winDiaTwo;
-let winZigOne;
-let winZigTwo;
-let winZigThree;
-let winZigFour;
+let timeMult;
 
 
+//Cached Elements
 const divLines = document.getElementById('play-lines');
 const divBalance = document.getElementById('credits-balance');
 const divBetAmt = document.getElementById('bet-amount');
 const divTotal = document.getElementById('total-bet');
+const messageEl = document.getElementById('message');
 
 
 
 
 //Event Listeners
-
 document.getElementById('bet').addEventListener('click', betting)
 document.getElementById('spin').addEventListener('click', spin);
 document.getElementById('playline').addEventListener('click', addLine)
@@ -53,6 +40,7 @@ const imagesLookup =
     '<img src="https://i.imgur.com/5Er6hxm.jpg">'
 ];
 
+// Objects to hold values for each Image slot
 const imgOne = {location: 'slot-one', value: 0};
 const imgTwo = {location: 'slot-two', value: 0};
 const imgThree = {location: 'slot-three', value: 0};
@@ -66,7 +54,8 @@ const imgTen = {location: 'slot-ten', value: 0};
 const imgEleven = {location: 'slot-eleven', value: 0};
 const imgTwelve = {location: 'slot-twelve', value: 0};
 
-const payoutLookup =[ 5, 10, 20, 50, 100, 200, 2, 5, 1, 1, 1]; // 2,5,1,1,1 are multipliers
+// Array for payout lookup by index(index number is same as image number)
+const payoutLookup =[ 1, 5, 10, 20, 150, 100, 2, 5, 1, 1, 1]; // 2,5,1,1,1 are multipliers
 
 //check functions stored in an array 
 const checks= [middleAcross, topAcross, bottomAcross, diagonalOne, diagonalTwo, zigZagOne, zigZagTwo, zigZagThree, zigZagFour];
@@ -76,32 +65,27 @@ init();
 function init() {
     bet = 1;
     win = 0;
+    winAmt = 0;
     balance = 1000;
     playLine = 1;
-    winTop = 0;
-    winMid = 0;
-    winBot = 0;
-    winDiaOne = 0;
-    winDiaTwo = 0;
-    winZigOne = 0;
-    winZigTwo = 0;
-    winZigThree = 0;
-    winZigFour = 0;
     totalBet = 0;
     displayBalance();
     displayBet();
     displayLines();
-    displayTotalBet();
 }
-
+// Assigns bet amount and display- called by eventListener
 function betting() {
     (bet < 5) ? bet++ : bet =1;
     displayBet();
+    displayTotalBet(); // update new total bet
 }
+// Assigns number of lines to play- called by evenListener
 function addLine() {
     (playLine < 9) ? playLine++ : playLine = 1;
     displayLines();
+    displayTotalBet(); 
 }
+// Sets max bet and max lines and spins the slots
 function maxBet() {
     bet = 5;
     playLine = 9;
@@ -111,51 +95,51 @@ function maxBet() {
     spin();
 }
 
-function imgOneGen(){ // displays an image on slot 1 depending on the value of imgNum
+function imgOneGen(){ // displays an image on slot 1 depending on the value of imgOne
     imgOne.value = Math.floor(Math.random() * 6)
     displayImg(imgOne);
 }
-function imgTwoGen(){ // displays an image on slot 2 depending on the value of imgNum
+function imgTwoGen(){ 
     imgTwo.value = Math.floor(Math.random() * 6)
     displayImg(imgTwo);
 }
-function imgThreeGen(){ // displays an image on slot 3 depending on the value of imgNum
+function imgThreeGen(){ 
     imgThree.value = Math.floor(Math.random() * 6)
     displayImg(imgThree);
 }
-function imgFourGen(){ // displays an image on slot 3 depending on the value of imgNum
+function imgFourGen(){ 
     imgFour.value = Math.floor(Math.random() * 6)
     displayImg(imgFour);
 }
-function imgFiveGen(){ // displays an image on slot 3 depending on the value of imgNum
+function imgFiveGen(){ 
     imgFive.value = Math.floor(Math.random() * 6)
     displayImg(imgFive);
 }
-function imgSixGen(){ // displays an image on slot 3 depending on the value of imgNum
+function imgSixGen(){ 
     imgSix.value = Math.floor(Math.random() * 6)
     displayImg(imgSix);
 }
-function imgSevenGen(){ // displays an image on slot 3 depending on the value of imgNum
+function imgSevenGen(){ 
     imgSeven.value = Math.floor(Math.random() * 6)
     displayImg(imgSeven);
 }
-function imgEightGen(){ // displays an image on slot 3 depending on the value of imgNum
+function imgEightGen(){ 
     imgEight.value = Math.floor(Math.random() * 6)
     displayImg(imgEight);
 }
-function imgNineGen(){ // displays an image on slot 3 depending on the value of imgNum
+function imgNineGen(){ 
     imgNine.value = Math.floor(Math.random() * 6)
     displayImg(imgNine);
 }
-function imgTenGen(){ // displays an image on slot 3 depending on the value of imgNum
+function imgTenGen(){ 
     imgTen.value = Math.floor(Math.random() * 5) + 6;
     displayImg(imgTen);
 }
-function imgElevenGen(){ // displays an image on slot 3 depending on the value of imgNum
+function imgElevenGen(){ 
     imgEleven.value = Math.floor(Math.random() * 5) + 6;
     displayImg(imgEleven);
 }
-function imgTwelveGen(){ // displays an image on slot 3 depending on the value of imgNum
+function imgTwelveGen(){ 
     imgTwelve.value = Math.floor(Math.random() * 5) + 6;
     displayImg(imgTwelve);
 }
@@ -207,6 +191,9 @@ function scrollFour() {
 }
 
 function spin() {
+    for (let i = 0; i < 10; i++){
+        checkTiming[i] = null;
+    }
     scrollOne();
     scrollTwo();
     scrollThree();
@@ -220,230 +207,255 @@ function spin() {
 }
 
 function displayBalance() {
-    divBalance.innerText= `Credits: $ ${balance}`;
+    divBalance.innerText= `Credits: $${balance}`;
 }
 function displayBet() {
-    divBetAmt.innerText= `Bet: $ ${bet}`;
+    divBetAmt.innerText= `Bet: $${bet}`;
 }
 function displayLines() {
-    divLines.innerText= `Total Lines: ${playLine}`;
+    divLines.innerText= `Lines: ${playLine}`;
 }
 function displayTotalBet() {
     totalBet = bet * playLine;
-    divTotal.innerText= `Total Bet: $ ${totalBet}`;
+    divTotal.innerText= `Total Bet: $${totalBet}`;
 }
 
 
-function topAcross() {
-    if (imgOne.value === imgFour.value && imgFour.value === imgSeven.value){ //top row straight across
-        if(bet === 5 && imgOne.value === 5 && imgTen.value === 8){ //jackpot
-            winTop = payoutLookup[imgTwo.value] * 1500;
-            highlightWin(imgOne, imgFour, imgSeven);
-            return;
-        }else if(bet === 5) {
-            winTop = payoutLookup[imgOne.value] * payoutLookup[imgTen.value];
-            highlightWin(imgOne, imgFour, imgSeven);
-            return;
-        }else {
-            winTop = payoutLookup[imgOne.value];
-            highlightWin(imgOne, imgFour, imgSeven);
-            return;
+
+const checkTiming =[null,null,null,null,null,null,null,null,null,null]; //stores a win at a index and then uses the index number to multiply the delay time
+
+
+
+
+function topAcross() { //top row straight across
+    timeMult = checkTiming.indexOf(null); // check checkTiming for null to see if there are another winners. Null = no winner
+    setTimeout(function() {
+        if (imgOne.value === imgFour.value && imgFour.value === imgSeven.value){ 
+            if(bet === 5 && imgOne.value === 5 && imgEleven.value === 8){ 
+                winAmt = payoutLookup[imgTwo.value] * 1500;
+            }else if(bet === 5 && imgOne.value !== 5) {
+                winAmt = payoutLookup[imgOne.value] * payoutLookup[imgEleven.value] * bet;
+            }else if(bet < 5){
+                winAmt = payoutLookup[imgOne.value] * bet;
+            }
+            let msg = `Line 1 Win : $ ${winAmt}`;
+            displayMessage(msg);
+            highlightWin(imgOne, imgFour, imgSeven, imgEleven);
+        } else {
+            winAmt = 0;
         }
-    } else {
-        winTop = 0;
-    }
+    }, 4000 * timeMult); // multiply 4000 ms by index number of first null
+    checkTiming[timeMult] = 1; //replace the value at the index of the null to 1 so that the next null will be at the next index number.
+}  
+function middleAcross() { // middle row straight across
+    timeMult = checkTiming.indexOf(null);
+    setTimeout(function() {
+        if (imgTwo.value === imgFive.value && imgFive.value === imgEight.value){ 
+            if(bet === 5 && imgTwo === 5 && imgEleven === 8){
+                winAmt = payoutLookup[imgTwo.value] * 1500;
+            }else if(bet === 5 && imgTwo.value !== 5) {
+                winAmt = payoutLookup[imgTwo.value] * payoutLookup[imgEleven.value] * bet;
+            }else if(bet < 5){
+                winAmt = payoutLookup[imgTwo.value] * bet;
+            }
+            let msg = `Line 2 Win : $ ${winAmt}`;
+            displayMessage(msg);
+            highlightWin(imgTwo, imgFive, imgEight, imgEleven);
+        } else {
+            winAmt = 0;
+        }
+    }, 4000 * timeMult);
+    checkTiming[timeMult] = 1;
 }
-function middleAcross() {
-    if (imgTwo.value === imgFive.value && imgFive.value === imgEight.value){ // middle row straight across
-        if(bet === 5 && imgTwo === 5 && imgEleven === 8){
-            winMid = payoutLookup[imgTwo.value] * 1500;
-            highlightWin(imgTwo, imgFive, imgEight);
-            return;
-        }else if(bet === 5) {
-            winMid = payoutLookup[imgTwo.value] * payoutLookup[imgEleven.value];
-            highlightWin(imgTwo, imgFive, imgEight);
-            return;
-        }else {
-            winMid = payoutLookup[imgTwo.value];
-            highlightWin(imgTwo, imgFive, imgEight);
-            return;
+function bottomAcross() { // bottom row straight across
+    timeMult = checkTiming.indexOf(null);
+    setTimeout(function() {
+        if (imgThree.value === imgSix.value && imgSix.value === imgNine.value){ 
+            if(bet === 5 && imgThree === 5 && imgEleven === 8){
+                winAmt = payoutLookup[imgThree.value] * 1500;
+            }else if(bet === 5 && imgThree.value !== 5) {
+                winAmt = payoutLookup[imgThree.value] * payoutLookup[imgEleven.value] * bet;
+            }else if(bet < 5){
+                winAmt = payoutLookup[imgThree.value] * bet;
+            }
+            let msg = `Line 3 Win : $ ${winAmt}`;
+            displayMessage(msg);
+            highlightWin(imgThree, imgSix, imgNine, imgEleven)
+        } else {
+            winAmt = 0;
         }
-    }else {
-        winMid = 0;
-    }
+    }, 4000 * timeMult);
+    checkTiming[timeMult] = 1;
 }
-function bottomAcross() {
-    if (imgThree.value === imgSix.value && imgSix.value === imgNine.value){ // bottom row straight across
-        if(bet === 5 && imgThree === 5 && imgTwelve === 8){
-            winBot = payoutLookup[imgThree.value] * 1500;
-            highlightWin(imgThree, imgSix, imgNine)
-            return;
-        }else if(bet === 5) {
-            winBot = payoutLookup[imgThree.value] * payoutLookup[imgTwelve.value];
-            highlightWin(imgThree, imgSix, imgNine)
-            return;
-        }else {
-            winBot = payoutLookup[imgThree.value];
-            highlightWin(imgThree, imgSix, imgNine)
-            return;
+function diagonalOne() { // diagonal top left to bottom right
+    timeMult = checkTiming.indexOf(null);
+    setTimeout(function() {
+        if (imgOne.value === imgFive.value && imgFive.value === imgNine.value){ 
+            if(bet === 5 && imgOne.value === 5 && imgEleven.value === 8){
+                winAmt = payoutLookup[imgOne.value] * 1500;
+            }else if(bet === 5 && imgOne.value !== 5) {
+                winAmt = payoutLookup[imgOne.value] * payoutLookup[imgEleven.value] * bet;
+            }else if(bet < 5){
+                winAmt = payoutLookup[imgOne.value] * bet;
+            }
+            let msg = `Line 4 Win : $ ${winAmt}`;
+            displayMessage(msg);
+            highlightWin(imgOne, imgFive, imgNine, imgEleven);
+        } else {
+            winAmt = 0;
         }
-    } else {
-        winBot = 0;
-    }
+    }, 4000 * timeMult);
+    checkTiming[timeMult] = 1;
 }
-function diagonalOne() {
-    if (imgOne.value === imgFive.value && imgFive.value === imgNine.value){ // diagonal top left to bottom right
-        if(bet === 5 && imgTwo.value === 5 && imgTwelve.value === 8){
-            winDiaOne = payoutLookup[imgOne.value] * 1500;
-            highlightWin(imgOne, imgFive, imgNine);
-            return;
-        }else if(bet === 5) {
-            winDiaOne = payoutLookup[imgOne.value] * payoutLookup[imgTwelve.value];
-            highlightWin(imgOne, imgFive, imgNine);
-            return;
-        }else {
-            winDiaOne = payoutLookup[imgOne.value];
-            highlightWin(imgOne, imgFive, imgNine);
-            return;
+function diagonalTwo() { // diagonal bottom lect to to top right
+    timeMult = checkTiming.indexOf(null);
+    setTimeout(function() {
+        if (imgThree.value === imgFive.value && imgFive.value === imgSeven.value){ 
+            if(bet === 5 && imgThree.value === 5 && imgEleven.value === 8){
+                winAmt = payoutLookup[imgThree.value] * 1500
+            }else if(bet === 5 && imgThree.value !== 5) {
+                winAmt = payoutLookup[imgThree.value] * payoutLookup[imgEleven.value] * bet;
+            }else if(bet < 5){
+                winAmt = payoutLookup[imgThree.value] * bet;
+            }
+            let msg =`Line 5 Win : $ ${winAmt}`;
+            displayMessage(msg);
+            highlightWin(imgThree, imgFive, imgSeven, imgEleven);
+        } else {
+            winAmt = 0;
         }
-    } else {
-        winDiaOne = 0;
-    }
+    }, 4000 * timeMult);
+    checkTiming[timeMult] = 1;
 }
-function diagonalTwo() {
-    if (imgThree.value === imgFive.value && imgFive.value === imgSeven.value){ // diagonal bottom lect to to top right
-        if(bet === 5 && imgThree.value === 5 && imgTen.value === 8){
-            winDiaTwo = payoutLookup[imgThree.value] * 1500
-            highlightWin(imgThree, imgFive, imgSeven);
-            return;
-        }else if(bet === 5) {
-            winDiaTwo = payoutLookup[imgThree.value] * payoutLookup[imgTen.value];
-            highlightWin(imgThree, imgFive, imgSeven);
-            return;
-        }else {
-            winDiaTwo = payoutLookup[imgThree.value];
-            highlightWin(imgThree, imgFive, imgSeven);
-            return;
+function zigZagOne() { // zig zag bot -> mid -> bot
+    timeMult = checkTiming.indexOf(null);
+    setTimeout(function() {
+        if (imgOne.value === imgFive.value && imgFive.value === imgSeven.value){ // zig zag top
+            if(bet === 5 && imgOne.value === 5 && imgEleven.value === 8){
+                winAmt = payoutLookup[imgOne.value] * 1500;
+            }else if(bet === 5 && imgOne.value !== 5) {
+                winAmt = payoutLookup[imgOne.value] * payoutLookup[imgEleven.value] * bet;
+            }else if(bet < 5){
+                winAmt = payoutLookup[imgOne.value] * bet;
+            }
+            let msg = `Line 6 Win : $ ${winAmt}`;
+            displayMessage(msg);
+            highlightWin(imgOne, imgFive, imgSeven, imgEleven);
+        } else {
+            winAmt = 0;
         }
-    } else {
-        winDiaTwo = 0;
-    }
+    }, 4000 * timeMult);
+    checkTiming[timeMult] = 1;
 }
-function zigZagOne() {
-    if (imgOne.value === imgFive.value && imgFive.value === imgSeven.value){ // zig zag top
-        if(bet === 5 && imgOne.value === 5 && imgTen.value === 8){
-            winZigOne = payoutLookup[imgOne.value] * 1500;
-            highlightWin(imgOne, imgFive, imgSeven);
-            return;
-        }else if(bet === 5) {
-            winZigOne = payoutLookup[imgOne.value] * payoutLookup[imgTen.value];
-            highlightWin(imgOne, imgFive, imgSeven);
-            return;
-        }else {
-            winZigOne = payoutLookup[imgOne.value];
-            highlightWin(imgOne, imgFive, imgSeven);
-            return;
+function zigZagTwo() { // zig zag top -> mid -> top
+    timeMult = checkTiming.indexOf(null);
+    setTimeout(function() {
+        if (imgThree.value === imgFive.value && imgFive.value === imgNine.value){ // zig zag bottom
+            if(bet === 5 && imgThree.value === 5 && imgEleven.value === 8){
+                winAmt = payoutLookup[imgThree.value] * 1500;
+            }else if(bet === 5 && imgThree.value !== 5) {
+                winAmt = payoutLookup[imgThree.value] * payoutLookup[imgEleven.value] * bet;
+            }else if(bet < 5){
+                winAmt = payoutLookup[imgThree.value] * bet;
+            }
+            let msg = `Line 7 Win : $ ${winAmt}`;
+            displayMessage(msg);
+            highlightWin(imgThree, imgFive, imgNine, imgEleven);
+        } else {
+            winAmt = 0;
         }
-    }else {
-        winZigOne = 0;
-    }
+    }, 4000 * timeMult);
+    checkTiming[timeMult] = 1;
 }
-function zigZagTwo() {
-    if (imgThree.value === imgFive.value && imgFive.value === imgNine.value){ // zig zag bottom
-        if(bet === 5 && imgThree.value === 5 && imgTwelve.value === 8){
-            winZigTwo = payoutLookup[imgThree.value] * 1500;
-            highlightWin(imgThree, imgFive, imgNine);
-            return;
-        }else if(bet === 5) {
-            winZigTwo = payoutLookup[imgThree.value] * payoutLookup[imgTwelve.value];
-            highlightWin(imgThree, imgFive, imgNine);
-            return;
-        }else {
-            winZigTwo = payoutLookup[imgThree.value];
-            highlightWin(imgThree, imgFive, imgNine);
-            return;
+function zigZagThree() {// zig zag mid -> top -> mid
+    timeMult = checkTiming.indexOf(null);
+    setTimeout(function() {
+        if (imgTwo.value === imgFour.value && imgFour.value === imgEight.value){ 
+            if(bet === 5 && imgTwo.value === 5 && imgEleven.value === 8){
+                winAmt = payoutLookup[imgTwo.value] * 1500;
+            }else if(bet === 5 && imgTwo.value !== 5) {
+                winAmt = payoutLookup[imgTwo.value] * payoutLookup[imgEleven.value] * bet;
+            }else if(bet < 5){
+                winAmt = payoutLookup[imgTwo.value] * bet;
+            }
+            let msg = `Line 8 Win : $ ${winAmt}`
+            displayMessage(msg);     
+            highlightWin(imgTwo, imgFour, imgEight, imgEleven);
+        } else {
+            winAmt = 0;
         }
-    } else {
-        winZigTwo = 0;
-    }
+    }, 4000 * timeMult);
+    checkTiming[timeMult] = 1;
 }
-function zigZagThree() {
-    if (imgTwo.value === imgFour.value && imgFour.value === imgEight.value){ // zig zag bottom
-        if(bet === 5 && imgTwo.value === 5 && imgEleven.value === 8){
-            winZigThree = payoutLookup[imgTwo.value] * 1500;
-            highlightWin(imgTwo, imgFour, imgEight);
-            return;
-        }else if(bet === 5) {
-            winZigThree = payoutLookup[imgTwo.value] * payoutLookup[imgEleven.value];
-            highlightWin(imgTwo, imgFour, imgEight);
-            return;
-        }else {
-            winZigThree = payoutLookup[imgTwo.value];
-            highlightWin(imgTwo, imgFour, imgEight);
-            return;
+function zigZagFour() { // zigzag mid -> bot -> mid
+    timeMult = checkTiming.indexOf(null); 
+    setTimeout(function() {
+        if (imgTwo.value === imgSix.value && imgSix.value === imgEight.value){ // zig zag bottom
+            if(bet === 5 && imgTwo.value === 5 && imgEleven.value === 8){
+                winAmt = payoutLookup[imgTwo.value] * 1500;
+            }else if(bet === 5 && imgTwo.value !== 5) {
+                winAmt = payoutLookup[imgTwo.value] * payoutLookup[imgEleven.value] * bet;
+            }else if(bet < 5){
+                winAmt = payoutLookup[imgTwo.value] * bet;
+            }
+            let msg =`Line 9 Win : $ ${winAmt}`;
+            displayMessage(msg);
+            highlightWin(imgTwo, imgSix, imgEight, imgEleven);
+        } else {
+            winAmt = 0;
         }
-        
-    } else {
-        winZigThree = 0;
-        }
-}
-function zigZagFour() {
-    if (imgTwo.value === imgSix.value && imgSix.value === imgEight.value){ // zig zag bottom
-        if(bet === 5 && imgTwo.value === 5 && imgEleven.value === 8){
-            winZigFour = payoutLookup[imgTwo.value] * 1500;
-            highlightWin(imgTwo, imgSix, imgEight);
-            return;
-        }else if(bet === 5) {
-            winZigFour = payoutLookup[imgTwo.value] * payoutLookup[imgEleven.value];
-            highlightWin(imgTwo, imgSix, imgEight);
-            return;
-        }else {
-            winZigFour = payoutLookup[imgTwo.value];
-            highlightWin(imgTwo, imgSix, imgEight);
-            return;
-        }
-    } else {
-        winZigFour = 0;
-    }
+    }, 4000 * timeMult);
+    checkTiming[timeMult] = 1; 
 }
 
 function checkWin () {
     for (let i = 0; i< playLine; i++){
         checks[i]();
-    }
-    
-    win = (winTop + winMid + winBot + winDiaOne + winDiaTwo + winZigOne + winZigTwo + winZigThree + winZigFour) * bet;
-    if (win!== 0){
-    console.log(`You win ${win} credits!`)
+        win += winAmt ;
     }
     balance += win;
     displayBalance();
-    winTop = 0;
-    winMid = 0;
-    winBot = 0;
-    winDiaOne = 0;
-    winDiaTwo = 0;
-    winZigOne = 0;
-    winZigTwo = 0;
-    winZigThree = 0;
-    winZigFour = 0;
-    
+    win = 0;
+    winAmt = 0;
+}
+
+function highlightWin(slotOne, slotTwo, slotThree, slotFour) { // highlights the winning slots with a red border
+    setTimeout(function() {
+        document.getElementById(`${slotOne.location}`).style.border = "5px solid red";
+    }, 250);
+    setTimeout(function(){
+        document.getElementById(`${slotTwo.location}`).style.border = "5px solid red";
+    }, 500);
+    setTimeout(function(){
+        document.getElementById(`${slotThree.location}`).style.border = "5px solid red";
+    }, 750);
+
+    if (slotFour.value !== 1 || bet !== 5){
+    setTimeout(function(){
+        document.getElementById(`${slotFour.location}`).style.border = "5px solid red";
+    }, 1000);
+    }
+
+    setTimeout(function(){ //clears the highlights after 4 seconds
+        document.getElementById(`${slotOne.location}`).style.border = "";
+        document.getElementById(`${slotTwo.location}`).style.border = "";
+        document.getElementById(`${slotThree.location}`).style.border = "";
+        document.getElementById(`${slotFour.location}`).style.border = "";
+    }, 4000);
 }
 
 
+    
+function displayImg(img) { // function to show images in slots
+    document.getElementById(`${img.location}`).innerHTML = imagesLookup[img.value];
+}
 
-    function highlightWin(slotOne, slotTwo, slotThree) {
-        document.getElementById(`${slotOne.location}`).style.border = "3px solid red";
-        document.getElementById(`${slotTwo.location}`).style.border = "3px solid red";
-        document.getElementById(`${slotThree.location}`).style.border = "3px solid red";
-        console.log(slotOne.location);
-        console.log(slotTwo.location);
-        console.log(slotThree.location);
-    }
+function displayMessage(msg) { // displays win messages
+    messageEl.innerText = msg;
+    setTimeout(function() {
+        messageEl.innerText = "";
+    }, 4000);
 
-    function displayImg(img) {
-        
-        document.getElementById(`${img.location}`).innerHTML = imagesLookup[img.value];
-    }
+}
 
     
