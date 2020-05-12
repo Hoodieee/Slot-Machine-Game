@@ -72,6 +72,7 @@ function init() {
     displayBalance();
     displayBet();
     displayLines();
+    displayTotalBet();
 }
 // Assigns bet amount and display- called by eventListener
 function betting() {
@@ -207,17 +208,17 @@ function spin() {
 }
 
 function displayBalance() {
-    divBalance.innerText= `Credits: $${balance}`;
+    divBalance.innerText= `${balance}`;
 }
 function displayBet() {
-    divBetAmt.innerText= `Bet: $${bet}`;
+    divBetAmt.innerText= `${bet}`;
 }
 function displayLines() {
-    divLines.innerText= `Lines: ${playLine}`;
+    divLines.innerText= `${playLine}`;
 }
 function displayTotalBet() {
     totalBet = bet * playLine;
-    divTotal.innerText= `Total Bet: $${totalBet}`;
+    divTotal.innerText= `${totalBet}`;
 }
 
 

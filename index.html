@@ -3,55 +3,23 @@
   <head>
       <meta charset="UTF-8">
       <meta name="viewport" content="width=device-width, initial-scale=1.0">
+      <link href="https://fonts.googleapis.com/css2?family=Bungee+Inline&display=swap" rel="stylesheet">
       <link rel="stylesheet" href="css/main.css">
       <script defer src="js/main.js"></script>
           <title>Slot Machine Game</title>
   </head>
   <body>
     <section id="slot-machine">
+      <section id="light">
+        <div id="lightbulb"></div>
+      </section>
       <section id="lightboard">
-        <div id="top-lights">
-          <div class="light"></div>
-          <div class="light"></div>
-          <div class="light"></div>
-          <div class="light"></div>
-          <div class="light"></div>
-          <div class="light"></div>
-          <div class="light"></div>
-          <div class="light"></div>
-          <div class="light"></div>
-          <div class="light"></div>
-          <div class="light"></div>
-          <div class="light"></div>
-          <div class="light"></div>
-        </div>
-        <div id="middle-lights">
-          <div id="left-lights">
-            <div class="light"></div>
-          </div>
-          <div id="top-console">Lucky 7's</div>
-          <div id="right-lights">
-            <div class="light"></div>
-          </div>
-        </div>
-
-        <div id="bottom-lights">
-            <div class="light"></div>
-            <div class="light"></div>
-            <div class="light"></div>
-            <div class="light"></div>
-            <div class="light"></div>
-            <div class="light"></div>
-            <div class="light"></div>
-            <div class="light"></div>
-            <div class="light"></div>
-            <div class="light"></div>
-            <div class="light"></div>
-            <div class="light"></div>
-            <div class="light"></div>
-        </div>
+        <div id="top-console">Lucky &nbsp;<img src="https://i.imgur.com/tKmPe3f.png">'s</div>
       </section>
 
+      <section id="sign-holder">
+        <div></div>
+      </section>
       <section id="game">
         <div class= "scrolls" id="one">
           <div class="slot" id="slot-one"><img src="https://i.imgur.com/6Ts68im.jpg"></div>
@@ -77,15 +45,34 @@
 
       <section id="display">
         <div id="display-left">
-          <div id="bet-amount"></div>            
-          <div id="play-lines"></div>
+          <div class="box" id="bet-box">
+            <div class= "title" id="bet-title">BET</div>
+            <div class= "white-box" id="bet-amount"></div> 
+          </div>
+    
+          <div class="box" id="line-box">
+            <div class="title" id="lines-title">LINES</div>
+            <div class="white-box" id="play-lines"></div>
+          </div>          
+          
         </div>
 
-        <div id="message"></div>
+
+        <div id="message-display">
+          <div id="message">Lucky &nbsp;<img src="https://i.imgur.com/tKmPe3f.png">&nbsp;'s</div>
+        </div>
+        
 
         <div id="display-right">
-          <div id="total-bet"></div>
-          <div id="credits-balance"></div>
+          <div class="box" id="total-bet-box">
+            <div class= "title" id="totalbet-title">TOTAL BET</div>
+            <div class="white-box" id="total-bet"></div>
+          </div>
+          <div class="box" id="balance-box">
+            <div class= "title" id="balance-title">CREDITS</div>
+            <div class="white-box" id="credits-balance"></div>
+          </div>
+          
         </div>
       </section>
       
