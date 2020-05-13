@@ -80,7 +80,7 @@ body{
     flex-direction: column;
     justify-content: center;
     width: 18%;
-    height: 260px;
+    height: 250px;
     border: 2px solid black;
 }
 
@@ -93,7 +93,7 @@ body{
     border-bottom: 5px solid gray;
     display: flex;
     flex-wrap: wrap;
-    height: 30%;
+    height: 28%;
     width: 450px;
     align-content: center;
     justify-content: space-around;;
@@ -244,7 +244,6 @@ button{
 #bet-box {
     width: 50%;
     background-color: black;
-
 }
 #line-box {
     width: 50%;

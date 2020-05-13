@@ -14,15 +14,21 @@ const divBalance = document.getElementById('credits-balance');
 const divBetAmt = document.getElementById('bet-amount');
 const divTotal = document.getElementById('total-bet');
 const messageEl = document.getElementById('message');
+const slotEl = document.querySelectorAll(".slot");
+const listenBet = document.getElementById('bet');
+const listenSpin = document.getElementById('spin');
+const listenLine = document.getElementById('playline')
+const listenMaxBet = document.getElementById('maxbet')
+
 
 
 
 
 //Event Listeners
-document.getElementById('bet').addEventListener('click', betting)
-document.getElementById('spin').addEventListener('click', spin);
-document.getElementById('playline').addEventListener('click', addLine)
-document.getElementById('maxbet').addEventListener('click', maxBet)
+listenBet.addEventListener('click', betting)
+listenSpin.addEventListener('click', spin);
+listenLine.addEventListener('click', addLine)
+listenMaxBet.addEventListener('click', maxBet)
 
 
 // lookup images by index value
@@ -55,7 +61,7 @@ const imgEleven = {location: 'slot-eleven', value: 0};
 const imgTwelve = {location: 'slot-twelve', value: 0};
 
 // Array for payout lookup by index(index number is same as image number)
-const payoutLookup =[ 1, 5, 10, 20, 150, 100, 2, 5, 1, 1, 1]; // 2,5,1,1,1 are multipliers
+const payoutLookup =[ 1, 5, 10, 20, 50, 100, 2, 5, 1, 1, 1]; // 2,5,1,1,1 are multipliers
 
 //check functions stored in an array 
 const checks= [middleAcross, topAcross, bottomAcross, diagonalOne, diagonalTwo, zigZagOne, zigZagTwo, zigZagThree, zigZagFour];
@@ -93,6 +99,8 @@ function maxBet() {
     displayBet();
     displayLines();
     displayTotalBet();
+    removeHighlight();
+    removeMessage();
     spin();
 }
 
@@ -192,18 +200,24 @@ function scrollFour() {
 }
 
 function spin() {
-    for (let i = 0; i < 10; i++){
-        checkTiming[i] = null;
-    }
+    removeHighlight();
+    removeMessage();
+    stopListen();
     scrollOne();
     scrollTwo();
     scrollThree();
     scrollFour();
+    win = 0;
+    for (let i = 0; i < 10; i++){
+        checkTiming[i] = null;
+    }
     balance -= totalBet;
     displayBalance();
     displayTotalBet();
-    setTimeout(checkWin, 3000);
-    win = 0;
+    setTimeout(checkWin, 4000);
+    setTimeout(startListen, 4000);
+
+
 
 }
 
@@ -227,197 +241,232 @@ const checkTiming =[null,null,null,null,null,null,null,null,null,null]; //stores
 
 
 
+function middleAcross() { // middle row straight across
+    timeMult = checkTiming.indexOf(null);
+    if (imgTwo.value === imgFive.value && imgFive.value === imgEight.value){ 
+        if(bet === 5 && imgTwo.value === 5 && imgEleven.value === 8){
+            winAmt = payoutLookup[imgTwo.value] * 1500;
+        }else if(bet === 5) {
+            winAmt = payoutLookup[imgTwo.value] * payoutLookup[imgEleven.value] * bet;
+        }else if(bet < 5){
+            winAmt = payoutLookup[imgTwo.value] * bet;
+        }
+        let msg = `Line 2 Win : $ ${winßAmt}`;
+        setTimeout(function() {
+            displayMessage(msg);
+            highlightWin(imgTwo, imgFive, imgEight, imgEleven);
+        }, 4000 * timeMult);
+        checkTiming[timeMult] = 1;
+    } else {
+        return ;
+    } 
+        console.log("middleacross");
+        console.log(`checktiming: ${checkTiming[timeMult]}`);
+        console.log(`imgTwo value: ${imgTwo.value}, imgFive.value: ${imgFive.value}, imageEight: ${imgEight.value}, imgEleven: ${imgEleven.value}`);
+        console.log(`payout: ${payoutLookup[imgTwo.value]}, bet = ${bet}; , winAmt = ${winAmt}`);
+}
 
 function topAcross() { //top row straight across
     timeMult = checkTiming.indexOf(null); // check checkTiming for null to see if there are another winners. Null = no winner
-    setTimeout(function() {
-        if (imgOne.value === imgFour.value && imgFour.value === imgSeven.value){ 
-            if(bet === 5 && imgOne.value === 5 && imgEleven.value === 8){ 
-                winAmt = payoutLookup[imgTwo.value] * 1500;
-            }else if(bet === 5 && imgOne.value !== 5) {
-                winAmt = payoutLookup[imgOne.value] * payoutLookup[imgEleven.value] * bet;
-            }else if(bet < 5){
-                winAmt = payoutLookup[imgOne.value] * bet;
-            }
-            let msg = `Line 1 Win : $ ${winAmt}`;
-            displayMessage(msg);
+    if (imgOne.value === imgFour.value && imgFour.value === imgSeven.value){ 
+        if(bet === 5 && imgOne.value === 5 && imgEleven.value === 8){ 
+            winAmt = payoutLookup[imgTwo.value] * 1500;
+        }else if(bet === 5) {
+            winAmt = payoutLookup[imgOne.value] * payoutLookup[imgEleven.value] * bet;
+        }else if(bet < 5){
+            winAmt = payoutLookup[imgOne.value] * bet;
+        }
+        let msg = `Line 1 Win : $ ${winAmt}`;
+        setTimeout(function() {
+        displayMessage(msg);
             highlightWin(imgOne, imgFour, imgSeven, imgEleven);
-        } else {
-            winAmt = 0;
-        }
-    }, 4000 * timeMult); // multiply 4000 ms by index number of first null
-    checkTiming[timeMult] = 1; //replace the value at the index of the null to 1 so that the next null will be at the next index number.
+        }, 4000 * timeMult); // multiply 4000 ms by index number of first null
+        checkTiming[timeMult] = 1; //replace the value at the index of the null to 1 so that the next null will be at the next index number.
+    } else {
+        return;
+    }
+        console.log("topacross");
+        console.log(`checktiming: ${checkTiming[timeMult]}`);
+        console.log(`imgOne value: ${imgOne.value}, imgFour: ${imgFour.value}, imgSeven.value: ${imgSeven.value}, imgEleven: ${imgEleven.value}`);
+        console.log(`payout: ${payoutLookup[imgOne.value]}, bet = ${bet}; , winAmt = ${winAmt}`);
 }  
-function middleAcross() { // middle row straight across
-    timeMult = checkTiming.indexOf(null);
-    setTimeout(function() {
-        if (imgTwo.value === imgFive.value && imgFive.value === imgEight.value){ 
-            if(bet === 5 && imgTwo === 5 && imgEleven === 8){
-                winAmt = payoutLookup[imgTwo.value] * 1500;
-            }else if(bet === 5 && imgTwo.value !== 5) {
-                winAmt = payoutLookup[imgTwo.value] * payoutLookup[imgEleven.value] * bet;
-            }else if(bet < 5){
-                winAmt = payoutLookup[imgTwo.value] * bet;
-            }
-            let msg = `Line 2 Win : $ ${winAmt}`;
-            displayMessage(msg);
-            highlightWin(imgTwo, imgFive, imgEight, imgEleven);
-        } else {
-            winAmt = 0;
-        }
-    }, 4000 * timeMult);
-    checkTiming[timeMult] = 1;
-}
 function bottomAcross() { // bottom row straight across
     timeMult = checkTiming.indexOf(null);
-    setTimeout(function() {
-        if (imgThree.value === imgSix.value && imgSix.value === imgNine.value){ 
-            if(bet === 5 && imgThree === 5 && imgEleven === 8){
-                winAmt = payoutLookup[imgThree.value] * 1500;
-            }else if(bet === 5 && imgThree.value !== 5) {
-                winAmt = payoutLookup[imgThree.value] * payoutLookup[imgEleven.value] * bet;
-            }else if(bet < 5){
-                winAmt = payoutLookup[imgThree.value] * bet;
-            }
-            let msg = `Line 3 Win : $ ${winAmt}`;
+    if (imgThree.value === imgSix.value && imgSix.value === imgNine.value){ 
+        if(bet === 5 && imgThree.value === 5 && imgEleven.value === 8){
+            winAmt = payoutLookup[imgThree.value] * 1500;
+        }else if(bet === 5) {
+            winAmt = payoutLookup[imgThree.value] * payoutLookup[imgEleven.value] * bet;
+        }else if(bet < 5){
+            winAmt = payoutLookup[imgThree.value] * bet;
+        }
+        let msg = `Line 3 Win : $ ${winAmt}`;
+        setTimeout(function() {
             displayMessage(msg);
             highlightWin(imgThree, imgSix, imgNine, imgEleven)
-        } else {
-            winAmt = 0;
-        }
-    }, 4000 * timeMult);
-    checkTiming[timeMult] = 1;
+        }, 4000 * timeMult);
+        checkTiming[timeMult] = 1;
+    } else {
+        return ;
+    }
+        console.log("bottomacross");
+        console.log(`checktiming: ${checkTiming[timeMult]}`);
+        console.log(`imgThree value: ${imgThree.value}, imgSix.value: ${imgSix.value}, imgNine: ${imgNine.value}, imgEleven: ${imgEleven.value}`);
+        console.log(`payout: ${payoutLookup[imgThree.value]}, bet = ${bet}; , winAmt = ${winAmt}`);
 }
 function diagonalOne() { // diagonal top left to bottom right
     timeMult = checkTiming.indexOf(null);
-    setTimeout(function() {
-        if (imgOne.value === imgFive.value && imgFive.value === imgNine.value){ 
-            if(bet === 5 && imgOne.value === 5 && imgEleven.value === 8){
-                winAmt = payoutLookup[imgOne.value] * 1500;
-            }else if(bet === 5 && imgOne.value !== 5) {
-                winAmt = payoutLookup[imgOne.value] * payoutLookup[imgEleven.value] * bet;
-            }else if(bet < 5){
-                winAmt = payoutLookup[imgOne.value] * bet;
-            }
-            let msg = `Line 4 Win : $ ${winAmt}`;
+    if (imgOne.value === imgFive.value && imgFive.value === imgNine.value){ 
+        if(bet === 5 && imgOne.value === 5 && imgEleven.value === 8){
+            winAmt = payoutLookup[imgOne.value] * 1500;
+        }else if(bet === 5) {
+            winAmt = payoutLookup[imgOne.value] * payoutLookup[imgEleven.value] * bet;
+        }else if(bet < 5){
+            winAmt = payoutLookup[imgOne.value] * bet;
+        }
+        let msg = `Line 4 Win : $ ${winAmt}`;
+        setTimeout(function() {
             displayMessage(msg);
             highlightWin(imgOne, imgFive, imgNine, imgEleven);
-        } else {
-            winAmt = 0;
-        }
-    }, 4000 * timeMult);
-    checkTiming[timeMult] = 1;
+        }, 4000 * timeMult);
+        checkTiming[timeMult] = 1;
+    } else {
+        return;
+    }
+        console.log("diaOne");
+        console.log(`checktiming: ${checkTiming[timeMult]}`);
+        console.log(`imgOne: ${imgOne.value}, imgFive.value: ${imgFive.value}, imgNine: ${imgNine.value}, imgEleven: ${imgEleven.value}`);
+        console.log(`payout: ${payoutLookup[imgOne.value]}, bet = ${bet}; , winAmt = ${winAmt}`);
 }
 function diagonalTwo() { // diagonal bottom lect to to top right
     timeMult = checkTiming.indexOf(null);
-    setTimeout(function() {
-        if (imgThree.value === imgFive.value && imgFive.value === imgSeven.value){ 
-            if(bet === 5 && imgThree.value === 5 && imgEleven.value === 8){
-                winAmt = payoutLookup[imgThree.value] * 1500
-            }else if(bet === 5 && imgThree.value !== 5) {
-                winAmt = payoutLookup[imgThree.value] * payoutLookup[imgEleven.value] * bet;
-            }else if(bet < 5){
-                winAmt = payoutLookup[imgThree.value] * bet;
-            }
-            let msg =`Line 5 Win : $ ${winAmt}`;
+    if (imgThree.value === imgFive.value && imgFive.value === imgSeven.value){ 
+        if(bet === 5 && imgThree.value === 5 && imgEleven.value === 8){
+            winAmt = payoutLookup[imgThree.value] * 1500
+        }else if(bet === 5) {
+            winAmt = payoutLookup[imgThree.value] * payoutLookup[imgEleven.value] * bet;
+        }else if(bet < 5){
+            winAmt = payoutLookup[imgThree.value] * bet;
+        }
+        let msg =`Line 5 Win : $ ${winAmt}`;
+        setTimeout(function() {
             displayMessage(msg);
             highlightWin(imgThree, imgFive, imgSeven, imgEleven);
-        } else {
-            winAmt = 0;
-        }
-    }, 4000 * timeMult);
-    checkTiming[timeMult] = 1;
+        }, 4000 * timeMult);
+        checkTiming[timeMult] = 1;
+    } else {
+        return;
+    }
+        console.log("dia2");
+        console.log(`checktiming: ${checkTiming[timeMult]}`);
+        console.log(`imgThree value: ${imgThree.value}, imgFive.value: ${imgFive.value}, imgSeven: ${imgSeven.value}, imgEleven: ${imgEleven.value}`);
+        console.log(`payout: ${payoutLookup[imgThree.value]}, bet = ${bet}; , winAmt = ${winAmt}`);
 }
 function zigZagOne() { // zig zag bot -> mid -> bot
     timeMult = checkTiming.indexOf(null);
-    setTimeout(function() {
-        if (imgOne.value === imgFive.value && imgFive.value === imgSeven.value){ // zig zag top
-            if(bet === 5 && imgOne.value === 5 && imgEleven.value === 8){
-                winAmt = payoutLookup[imgOne.value] * 1500;
-            }else if(bet === 5 && imgOne.value !== 5) {
-                winAmt = payoutLookup[imgOne.value] * payoutLookup[imgEleven.value] * bet;
-            }else if(bet < 5){
-                winAmt = payoutLookup[imgOne.value] * bet;
-            }
-            let msg = `Line 6 Win : $ ${winAmt}`;
+    if (imgOne.value === imgFive.value && imgFive.value === imgSeven.value){ // zig zag top
+        if(bet === 5 && imgOne.value === 5 && imgEleven.value === 8){
+            winAmt = payoutLookup[imgOne.value] * 1500;
+        }else if(bet === 5) {
+            winAmt = payoutLookup[imgOne.value] * payoutLookup[imgEleven.value] * bet;
+        }else if(bet < 5){
+            winAmt = payoutLookup[imgOne.value] * bet;
+        }
+        let msg = `Line 6 Win : $ ${winAmt}`;
+        setTimeout(function() {
             displayMessage(msg);
             highlightWin(imgOne, imgFive, imgSeven, imgEleven);
-        } else {
-            winAmt = 0;
-        }
-    }, 4000 * timeMult);
-    checkTiming[timeMult] = 1;
+        }, 4000 * timeMult);
+        checkTiming[timeMult] = 1;
+    } else {
+        return;
+    }
+        console.log("zig1");
+        console.log(`checktiming: ${checkTiming[timeMult]}`);
+        console.log(`imgOne value: ${imgOne.value}, imgFive.value: ${imgFive.value}, imgSeven: ${imgSeven.value}, imgEleven: ${imgEleven.value}`);
+        console.log(`payout: ${payoutLookup[imgOne.value]}, bet = ${bet}; , winAmt = ${winAmt}`);
 }
 function zigZagTwo() { // zig zag top -> mid -> top
     timeMult = checkTiming.indexOf(null);
-    setTimeout(function() {
-        if (imgThree.value === imgFive.value && imgFive.value === imgNine.value){ // zig zag bottom
-            if(bet === 5 && imgThree.value === 5 && imgEleven.value === 8){
-                winAmt = payoutLookup[imgThree.value] * 1500;
-            }else if(bet === 5 && imgThree.value !== 5) {
-                winAmt = payoutLookup[imgThree.value] * payoutLookup[imgEleven.value] * bet;
-            }else if(bet < 5){
-                winAmt = payoutLookup[imgThree.value] * bet;
-            }
-            let msg = `Line 7 Win : $ ${winAmt}`;
-            displayMessage(msg);
-            highlightWin(imgThree, imgFive, imgNine, imgEleven);
-        } else {
-            winAmt = 0;
+    if (imgThree.value === imgFive.value && imgFive.value === imgNine.value){ // zig zag bottom
+        if(bet === 5 && imgThree.value === 5 && imgEleven.value === 8){
+            winAmt = payoutLookup[imgThree.value] * 1500;
+        }else if(bet === 5) {
+            winAmt = payoutLookup[imgThree.value] * payoutLookup[imgEleven.value] * bet;
+        }else if(bet < 5){
+            winAmt = payoutLookup[imgThree.value] * bet;
         }
-    }, 4000 * timeMult);
-    checkTiming[timeMult] = 1;
+        let msg = `Line 7 Win : $ ${winAmt}`;
+        setTimeout(function() {
+        displayMessage(msg);
+        highlightWin(imgThree, imgFive, imgNine, imgEleven);
+         }, 4000 * timeMult);
+        checkTiming[timeMult] = 1;
+    } else {
+        return;
+    }
+        console.log("zigTwo");
+        console.log(`checktiming: ${checkTiming[timeMult]}`);
+        console.log(`imgThree value: ${imgThree.value}, imgFive.value: ${imgFive.value}, imgNine: ${imgNine.value}, imgEleven: ${imgEleven.value}`);
+        console.log(`payout: ${payoutLookup[imgThree.value]}, bet = ${bet}; , winAmt = ${winAmt}`);
 }
 function zigZagThree() {// zig zag mid -> top -> mid
     timeMult = checkTiming.indexOf(null);
-    setTimeout(function() {
-        if (imgTwo.value === imgFour.value && imgFour.value === imgEight.value){ 
-            if(bet === 5 && imgTwo.value === 5 && imgEleven.value === 8){
-                winAmt = payoutLookup[imgTwo.value] * 1500;
-            }else if(bet === 5 && imgTwo.value !== 5) {
-                winAmt = payoutLookup[imgTwo.value] * payoutLookup[imgEleven.value] * bet;
-            }else if(bet < 5){
-                winAmt = payoutLookup[imgTwo.value] * bet;
-            }
-            let msg = `Line 8 Win : $ ${winAmt}`
+    if (imgTwo.value === imgFour.value && imgFour.value === imgEight.value){ 
+        if(bet === 5 && imgTwo.value === 5 && imgEleven.value === 8){
+            winAmt = payoutLookup[imgTwo.value] * 1500;
+        }else if(bet === 5) {
+            winAmt = payoutLookup[imgTwo.value] * payoutLookup[imgEleven.value] * bet;
+        }else if(bet < 5){
+            winAmt = payoutLookup[imgTwo.value] * bet;
+        }
+        let msg = `Line 8 Win : $ ${winAmt}`
+        setTimeout(function() {
             displayMessage(msg);     
             highlightWin(imgTwo, imgFour, imgEight, imgEleven);
-        } else {
-            winAmt = 0;
-        }
-    }, 4000 * timeMult);
-    checkTiming[timeMult] = 1;
+        }, 4000 * timeMult);
+        checkTiming[timeMult] = 1;
+    } else {
+        return;
+    }        
+        console.log("zig3");
+        console.log(`checktiming: ${checkTiming[timeMult]}`);
+        console.log(`imgTwo value: ${imgTwo.value}, imgFour.value: ${imgFour.value}, imgEight: ${imgEight.value}, imgEleven: ${imgEleven.value}`);
+        console.log(`payout: ${payoutLookup[imgTwo.value]}, bet = ${bet}; , winAmt = ${winAmt}`);
 }
 function zigZagFour() { // zigzag mid -> bot -> mid
     timeMult = checkTiming.indexOf(null); 
-    setTimeout(function() {
-        if (imgTwo.value === imgSix.value && imgSix.value === imgEight.value){ // zig zag bottom
-            if(bet === 5 && imgTwo.value === 5 && imgEleven.value === 8){
-                winAmt = payoutLookup[imgTwo.value] * 1500;
-            }else if(bet === 5 && imgTwo.value !== 5) {
-                winAmt = payoutLookup[imgTwo.value] * payoutLookup[imgEleven.value] * bet;
-            }else if(bet < 5){
-                winAmt = payoutLookup[imgTwo.value] * bet;
-            }
-            let msg =`Line 9 Win : $ ${winAmt}`;
+    if (imgTwo.value === imgSix.value && imgSix.value === imgEight.value){ // zig zag bottom
+        if(bet === 5 && imgTwo.value === 5 && imgEleven.value === 8){
+            winAmt = payoutLookup[imgTwo.value] * 1500;
+        }else if(bet === 5) {
+            winAmt = payoutLookup[imgTwo.value] * payoutLookup[imgEleven.value] * bet;
+        }else if(bet < 5){
+            winAmt = payoutLookup[imgTwo.value] * bet;
+        }
+        let msg =`Line 9 Win : $ ${winAmt}`;
+        setTimeout(function() {
             displayMessage(msg);
             highlightWin(imgTwo, imgSix, imgEight, imgEleven);
-        } else {
-            winAmt = 0;
-        }
-    }, 4000 * timeMult);
-    checkTiming[timeMult] = 1; 
+        }, 4000 * timeMult);
+        checkTiming[timeMult] = 1; 
+    } else {
+        return;
+    }
+        console.log("zig4");
+        console.log(`checktiming: ${checkTiming[timeMult]}`);
+        console.log(`imgTwo value: ${imgTwo.value}, imgSix.value: ${imgSix.value}, imgEight: ${imgEight.value}, imgEleven: ${imgEleven.value}`);
+        console.log(`payout: ${payoutLookup[imgTwo.value]}, bet = ${bet}; , winAmt = ${winAmt}`);
 }
 
 function checkWin () {
     for (let i = 0; i< playLine; i++){
         checks[i]();
         win += winAmt ;
+        winAmt = 0;
     }
     balance += win;
     displayBalance();
-    win = 0;
-    winAmt = 0;
 }
 
 function highlightWin(slotOne, slotTwo, slotThree, slotFour) { // highlights the winning slots with a red border
@@ -432,17 +481,17 @@ function highlightWin(slotOne, slotTwo, slotThree, slotFour) { // highlights the
     }, 750);
 
     if (slotFour.value !== 1 || bet !== 5){
-    setTimeout(function(){
-        document.getElementById(`${slotFour.location}`).style.border = "5px solid red";
-    }, 1000);
+        setTimeout(function(){
+            document.getElementById(`${slotFour.location}`).style.border = "5px solid red";
+        }, 1000);
     }
-
-    setTimeout(function(){ //clears the highlights after 4 seconds
+    setTimeout(function() {
         document.getElementById(`${slotOne.location}`).style.border = "";
         document.getElementById(`${slotTwo.location}`).style.border = "";
         document.getElementById(`${slotThree.location}`).style.border = "";
         document.getElementById(`${slotFour.location}`).style.border = "";
-    }, 4000);
+    }, 4000); //clears the highlights after 4 seconds
+ 
 }
 
 
@@ -452,11 +501,37 @@ function displayImg(img) { // function to show images in slots
 }
 
 function displayMessage(msg) { // displays win messages
+    messageEl.style.fontSize = '15px';
     messageEl.innerText = msg;
-    setTimeout(function() {
-        messageEl.innerText = "";
-    }, 4000);
+    setTimeout(removeMessage, 4000);
 
 }
+function displayJackpot() {
+    messageEl.style.fontSize = '30px';
+    messageEl.innerText = "JACKPOT WIN";
+    setTimeout(removeMessage, 5000);
+}
+function stopListen() {
+    listenBet.removeEventListener('click', betting);
+    listenSpin.removeEventListener('click', spin);
+    listenLine.removeEventListener('click', addLine);
+    listenMaxBet.removeEventListener('click', maxBet);
+}
 
-    
+function startListen() {
+    listenBet.addEventListener('click', betting)
+    listenSpin.addEventListener('click', spin);
+    listenLine.addEventListener('click', addLine)
+    listenMaxBet.addEventListener('click', maxBet)
+}
+
+function removeHighlight() {
+    for (let i = 0; i< slotEl.length; i++){
+    slotEl[i].style.border= "";
+    }
+}
+
+function removeMessage() {
+    messageEl.style.fontSize = '20px';
+    messageEl.innerHTML = `Lucky &nbsp;<img src="https://i.imgur.com/tKmPe3f.png">&nbsp;'s`;
+}
