@@ -133,6 +133,7 @@ body{
     grid-area: console;
     justify-content: center;
     align-items: center;
+    text-align: center;
     font-size: 20px;
     background-color: rgba(247, 31, 31, 0.3);
     width: 100%;

@@ -30,6 +30,8 @@ const pullbarEl = document.getElementById('pullbar');
 
 
 
+
+
 //Event Listeners
 listenBet.addEventListener('click', betting)
 listenSpin.addEventListener('click', spin);
@@ -37,6 +39,7 @@ listenLine.addEventListener('click', addLine)
 listenMaxBet.addEventListener('click', maxBet)
 pullbarEl.addEventListener('mousedown', barDown);
 pullbarEl.addEventListener('mouseup', barUp);
+
 
 
 // lookup images by index value
@@ -71,22 +74,26 @@ const imgTwelve = {location: 'slot-twelve', value: 0};
 // Array for payout lookup by index(index number is same as image number)
 const payoutLookup =[ 1, 5, 10, 20, 50, 100, 2, 5, 1, 1, 1]; // 2,5,1,1,1 are multipliers
 
-//check functions stored in an array 
+//check functions stored in an array. Accessed depending on how many lines pla
 const checks= [middleAcross, topAcross, bottomAcross, diagonalOne, diagonalTwo, zigZagOne, zigZagTwo, zigZagThree, zigZagFour];
 
 init();
+function newGame() {
+    init();
+}
 
 function init() {
     bet = 1;
     win = 0;
     winAmt = 0;
-    balance = 1000;
+    balance = 50;
     playLine = 1;
     totalBet = 0;
     displayBalance();
     displayBet();
     displayLines();
     displayTotalBet();
+    removeMessage();
 }
 // Assigns bet amount and display- called by eventListener
 function betting() {
@@ -208,25 +215,40 @@ function scrollFour() {
 }
 
 function spin() {
-    removeHighlight();
-    removeMessage();
-    stopListen();
-    scrollOne();
-    scrollTwo();
-    scrollThree();
-    scrollFour();
-    win = 0;
-    for (let i = 0; i < 10; i++){
-        checkTiming[i] = null;
+    if(balance === 0){
+        messageEl.innerHTML= 'Game Over<button id="newgame">Play Again</button>'
+        document.getElementById("newgame").addEventListener('click', init);
+        return;
+    } else if (balance - totalBet < 0){
+        messageEl.innerHTML= "Insufficient funds";
+        return;
     }
-    balance -= totalBet;
-    displayBalance();
-    displayTotalBet();
-    setTimeout(checkWin, 4000);
-    setTimeout(startListen, 4000);
+    else{
+        removeHighlight();
+        removeMessage();
+        stopListen();
+        scrollOne();
+        scrollTwo();
+        scrollThree();
+        scrollFour();
+        win = 0;
+        for (let i = 0; i < 10; i++){
+            checkTiming[i] = null;
+        }
+        balance -= totalBet;
+        displayBalance();
+        displayTotalBet();
+        setTimeout(checkWin, 4000);
+        setTimeout(startListen, 4000);
+    }
+}
 
 
-
+function checkBalance() {
+    if (balance - totalBet < 0){
+        messageEl.innerText= "Insufficient funds";
+    }
+    return balanceCheck = true;
 }
 
 function displayBalance() {
@@ -259,9 +281,14 @@ function middleAcross() { // middle row straight across
         }else if(bet < 5){
             winAmt = payoutLookup[imgTwo.value] * bet;
         }
-        let msg = `Line 2 Win : $ ${winßAmt}`;
+        let msg = `Line 2 Win : $ ${winAmt}`;
         setTimeout(function() {
-            displayMessage(msg);
+            if(bet === 5 && imgTwo.value === 5 && imgEleven.value === 8){
+                jpAnimation
+            } else{
+                displayMessage(msg);
+                winAnimation();
+            }
             highlightWin(imgTwo, imgFive, imgEight, imgEleven);
         }, 4000 * timeMult);
         checkTiming[timeMult] = 1;
@@ -270,8 +297,6 @@ function middleAcross() { // middle row straight across
     } 
         console.log("middleacross");
         console.log(`checktiming: ${checkTiming[timeMult]}`);
-        console.log(`imgTwo value: ${imgTwo.value}, imgFive.value: ${imgFive.value}, imageEight: ${imgEight.value}, imgEleven: ${imgEleven.value}`);
-        console.log(`payout: ${payoutLookup[imgTwo.value]}, bet = ${bet}; , winAmt = ${winAmt}`);
 }
 
 function topAcross() { //top row straight across
@@ -286,7 +311,12 @@ function topAcross() { //top row straight across
         }
         let msg = `Line 1 Win : $ ${winAmt}`;
         setTimeout(function() {
-        displayMessage(msg);
+            if(bet === 5 && imgOne.value === 5 && imgEleven.value === 8){ 
+                jpAnimation();
+            } else{
+                displayMessage(msg);
+                winAnimation();
+            }
             highlightWin(imgOne, imgFour, imgSeven, imgEleven);
         }, 4000 * timeMult); // multiply 4000 ms by index number of first null
         checkTiming[timeMult] = 1; //replace the value at the index of the null to 1 so that the next null will be at the next index number.
@@ -295,8 +325,6 @@ function topAcross() { //top row straight across
     }
         console.log("topacross");
         console.log(`checktiming: ${checkTiming[timeMult]}`);
-        console.log(`imgOne value: ${imgOne.value}, imgFour: ${imgFour.value}, imgSeven.value: ${imgSeven.value}, imgEleven: ${imgEleven.value}`);
-        console.log(`payout: ${payoutLookup[imgOne.value]}, bet = ${bet}; , winAmt = ${winAmt}`);
 }  
 function bottomAcross() { // bottom row straight across
     timeMult = checkTiming.indexOf(null);
@@ -310,7 +338,12 @@ function bottomAcross() { // bottom row straight across
         }
         let msg = `Line 3 Win : $ ${winAmt}`;
         setTimeout(function() {
-            displayMessage(msg);
+            if(bet === 5 && imgThree.value === 5 && imgEleven.value === 8){
+                jpAnimation();
+            } else{
+                displayMessage(msg);
+                winAnimation();
+            }
             highlightWin(imgThree, imgSix, imgNine, imgEleven)
         }, 4000 * timeMult);
         checkTiming[timeMult] = 1;
@@ -319,8 +352,7 @@ function bottomAcross() { // bottom row straight across
     }
         console.log("bottomacross");
         console.log(`checktiming: ${checkTiming[timeMult]}`);
-        console.log(`imgThree value: ${imgThree.value}, imgSix.value: ${imgSix.value}, imgNine: ${imgNine.value}, imgEleven: ${imgEleven.value}`);
-        console.log(`payout: ${payoutLookup[imgThree.value]}, bet = ${bet}; , winAmt = ${winAmt}`);
+
 }
 function diagonalOne() { // diagonal top left to bottom right
     timeMult = checkTiming.indexOf(null);
@@ -334,7 +366,12 @@ function diagonalOne() { // diagonal top left to bottom right
         }
         let msg = `Line 4 Win : $ ${winAmt}`;
         setTimeout(function() {
-            displayMessage(msg);
+            if(bet === 5 && imgOne.value === 5 && imgEleven.value === 8){
+                jpAnimation();
+            } else{
+                displayMessage(msg);
+                winAnimation();
+            }
             highlightWin(imgOne, imgFive, imgNine, imgEleven);
         }, 4000 * timeMult);
         checkTiming[timeMult] = 1;
@@ -343,8 +380,7 @@ function diagonalOne() { // diagonal top left to bottom right
     }
         console.log("diaOne");
         console.log(`checktiming: ${checkTiming[timeMult]}`);
-        console.log(`imgOne: ${imgOne.value}, imgFive.value: ${imgFive.value}, imgNine: ${imgNine.value}, imgEleven: ${imgEleven.value}`);
-        console.log(`payout: ${payoutLookup[imgOne.value]}, bet = ${bet}; , winAmt = ${winAmt}`);
+
 }
 function diagonalTwo() { // diagonal bottom lect to to top right
     timeMult = checkTiming.indexOf(null);
@@ -358,7 +394,12 @@ function diagonalTwo() { // diagonal bottom lect to to top right
         }
         let msg =`Line 5 Win : $ ${winAmt}`;
         setTimeout(function() {
-            displayMessage(msg);
+            if(bet === 5 && imgThree.value === 5 && imgEleven.value === 8){
+                jpAnimation();
+            } else{
+                displayMessage(msg);
+                winAnimation();
+            }
             highlightWin(imgThree, imgFive, imgSeven, imgEleven);
         }, 4000 * timeMult);
         checkTiming[timeMult] = 1;
@@ -367,8 +408,6 @@ function diagonalTwo() { // diagonal bottom lect to to top right
     }
         console.log("dia2");
         console.log(`checktiming: ${checkTiming[timeMult]}`);
-        console.log(`imgThree value: ${imgThree.value}, imgFive.value: ${imgFive.value}, imgSeven: ${imgSeven.value}, imgEleven: ${imgEleven.value}`);
-        console.log(`payout: ${payoutLookup[imgThree.value]}, bet = ${bet}; , winAmt = ${winAmt}`);
 }
 function zigZagOne() { // zig zag bot -> mid -> bot
     timeMult = checkTiming.indexOf(null);
@@ -382,7 +421,12 @@ function zigZagOne() { // zig zag bot -> mid -> bot
         }
         let msg = `Line 6 Win : $ ${winAmt}`;
         setTimeout(function() {
-            displayMessage(msg);
+            if(bet === 5 && imgOne.value === 5 && imgEleven.value === 8){
+                jpAnimation();
+            } else{
+                displayMessage(msg);
+                winAnimation();
+            }
             highlightWin(imgOne, imgFive, imgSeven, imgEleven);
         }, 4000 * timeMult);
         checkTiming[timeMult] = 1;
@@ -391,8 +435,6 @@ function zigZagOne() { // zig zag bot -> mid -> bot
     }
         console.log("zig1");
         console.log(`checktiming: ${checkTiming[timeMult]}`);
-        console.log(`imgOne value: ${imgOne.value}, imgFive.value: ${imgFive.value}, imgSeven: ${imgSeven.value}, imgEleven: ${imgEleven.value}`);
-        console.log(`payout: ${payoutLookup[imgOne.value]}, bet = ${bet}; , winAmt = ${winAmt}`);
 }
 function zigZagTwo() { // zig zag top -> mid -> top
     timeMult = checkTiming.indexOf(null);
@@ -406,8 +448,13 @@ function zigZagTwo() { // zig zag top -> mid -> top
         }
         let msg = `Line 7 Win : $ ${winAmt}`;
         setTimeout(function() {
-        displayMessage(msg);
-        highlightWin(imgThree, imgFive, imgNine, imgEleven);
+            if(bet === 5 && imgThree.value === 5 && imgEleven.value === 8){
+                jpAnimation();
+            } else{
+                displayMessage(msg);
+                winAnimation();
+            }
+            highlightWin(imgThree, imgFive, imgNine, imgEleven);
          }, 4000 * timeMult);
         checkTiming[timeMult] = 1;
     } else {
@@ -415,8 +462,6 @@ function zigZagTwo() { // zig zag top -> mid -> top
     }
         console.log("zigTwo");
         console.log(`checktiming: ${checkTiming[timeMult]}`);
-        console.log(`imgThree value: ${imgThree.value}, imgFive.value: ${imgFive.value}, imgNine: ${imgNine.value}, imgEleven: ${imgEleven.value}`);
-        console.log(`payout: ${payoutLookup[imgThree.value]}, bet = ${bet}; , winAmt = ${winAmt}`);
 }
 function zigZagThree() {// zig zag mid -> top -> mid
     timeMult = checkTiming.indexOf(null);
@@ -430,7 +475,12 @@ function zigZagThree() {// zig zag mid -> top -> mid
         }
         let msg = `Line 8 Win : $ ${winAmt}`
         setTimeout(function() {
-            displayMessage(msg);     
+            if(bet === 5 && imgTwo.value === 5 && imgEleven.value === 8){
+                jpAnimation();
+            }else {
+                displayMessage(msg); 
+                winAnimation();    
+            }
             highlightWin(imgTwo, imgFour, imgEight, imgEleven);
         }, 4000 * timeMult);
         checkTiming[timeMult] = 1;
@@ -439,8 +489,6 @@ function zigZagThree() {// zig zag mid -> top -> mid
     }        
         console.log("zig3");
         console.log(`checktiming: ${checkTiming[timeMult]}`);
-        console.log(`imgTwo value: ${imgTwo.value}, imgFour.value: ${imgFour.value}, imgEight: ${imgEight.value}, imgEleven: ${imgEleven.value}`);
-        console.log(`payout: ${payoutLookup[imgTwo.value]}, bet = ${bet}; , winAmt = ${winAmt}`);
 }
 function zigZagFour() { // zigzag mid -> bot -> mid
     timeMult = checkTiming.indexOf(null); 
@@ -454,7 +502,12 @@ function zigZagFour() { // zigzag mid -> bot -> mid
         }
         let msg =`Line 9 Win : $ ${winAmt}`;
         setTimeout(function() {
-            displayMessage(msg);
+            if(bet === 5 && imgTwo.value === 5 && imgEleven.value === 8) {
+                jpAnimation();
+            } else {
+                displayMessage(msg);
+                winAnimation();
+            }
             highlightWin(imgTwo, imgSix, imgEight, imgEleven);
         }, 4000 * timeMult);
         checkTiming[timeMult] = 1; 
@@ -463,8 +516,6 @@ function zigZagFour() { // zigzag mid -> bot -> mid
     }
         console.log("zig4");
         console.log(`checktiming: ${checkTiming[timeMult]}`);
-        console.log(`imgTwo value: ${imgTwo.value}, imgSix.value: ${imgSix.value}, imgEight: ${imgEight.value}, imgEleven: ${imgEleven.value}`);
-        console.log(`payout: ${payoutLookup[imgTwo.value]}, bet = ${bet}; , winAmt = ${winAmt}`);
 }
 
 function checkWin () {
@@ -511,15 +562,13 @@ function displayImg(img) { // function to show images in slots
 function displayMessage(msg) { // displays win messages
     messageEl.style.fontSize = '15px';
     messageEl.innerText = msg;
-    setTimeout(removeMessage, 4000);
 
 }
-function displayJackpot() {
+function displayJackpot() { // displays jackpot message on the middle console under the scrolls
     messageEl.style.fontSize = '30px';
     messageEl.innerText = "JACKPOT WIN";
-    setTimeout(removeMessage, 6000);
 }
-function stopListen() {
+function stopListen() { // turns off event listeners used to prevent multiple spins in between scrolls
     listenBet.removeEventListener('click', betting);
     listenSpin.removeEventListener('click', spin);
     listenLine.removeEventListener('click', addLine);
@@ -528,7 +577,7 @@ function stopListen() {
     pullbarEl.removeEventListener('mouseup', barUp);
 }
 
-function startListen() {
+function startListen() { // turns on event listeners to listen for next bet,spin, addline, maxbet, or bar pull
     listenBet.addEventListener('click', betting)
     listenSpin.addEventListener('click', spin);
     listenLine.addEventListener('click', addLine)
@@ -537,7 +586,7 @@ function startListen() {
     pullbarEl.addEventListener('mouseup', barUp);
 }
 
-function removeHighlight() {
+function removeHighlight() { //clears out the red border highlights if player presses spin before message finishes rendering
     for (let i = 0; i< slotEl.length; i++){
     slotEl[i].style.border= "";
     }
@@ -567,7 +616,7 @@ function topConsoleDisplay() {
     }, 6000)
 }
 
-function changeBorder() {
+function changeBorder() { // changes the color of the borders as part of the jackpot animation
     const borderInt = setInterval (function() {
         let r = Math.floor((Math.random() * 254) + 1);
         let g = Math.floor((Math.random() * 254) + 1);
@@ -575,15 +624,15 @@ function changeBorder() {
         let newColor = `rgb(${r}, ${g}, ${b})`;
         console.log(newColor);
         lightboardEl.style.border = `8px solid ${newColor}`;
-        lightboardEl.style.boxShadow = `0px 3px 40px ${newColor}`;
+        lightboardEl.style.boxShadow = `0px 3px 100px ${newColor}`;
         gameEl.style.border = `8px solid ${newColor}`;
-        gameEl.style.boxShadow = `0px 3px 40px ${newColor}`;
+        gameEl.style.boxShadow = `0px 3px 100px ${newColor}`;
         displayEl.style.border = `8px solid ${newColor}`;
-        displayEl.style.boxShadow = `0px 3px 40px ${newColor}`;
+        displayEl.style.boxShadow = `0px 3px 100px ${newColor}`;
         lightbulbEl.style.borderTop = `3px solid ${newColor}`;
         lightbulbEl.style.borderLeft = `3px solid ${newColor}`;
         lightbulbEl.style.borderRight = `3px solid ${newColor}`;
-        lightbulbEl.style.boxShadow = `0px 3px 40px ${newColor}`;
+        lightbulbEl.style.boxShadow = `0px 3px 100px ${newColor}`;
         lightbulbEl.style.backgroundColor = `${newColor}`;
         lightbulbEl.style.backgroundImage = `radial-gradient(white, ${newColor})`;
 
@@ -606,32 +655,38 @@ function changeBorder() {
 
 }
 
-function jpAnimation() {
+function jpAnimation() { // runs jackpot animation
     displayJackpot();
     topConsoleDisplay();
     changeBorder();
 }
 
-function barDown() {
+function barDown() { // pulls bar down on mouse down
     pullbarEl.innerHTML = '<img src="https://i.imgur.com/LV3qIO1.png">'
     
 }
 
-function barUp() {
+function barUp() { // brings bar back up and spins slots on mouse up 
     pullbarEl.innerHTML = '<img src="https://i.imgur.com/UQkRMsH.png">'
     spin();
 }
 
-function winAnimation(){
+function winAnimation(){ // regular win animation
 
     const lightChange = setInterval (function() {
         lightbulbEl.style.backgroundColor = "white";
         lightbulbEl.style.backgroundImage = "radial-gradient(white, yellow)";
         lightbulbEl.style.boxShadow = "0 3px 100px yellow";
+        lightboardEl.style.boxShadow = `0px 3px 100px red`;
+        gameEl.style.boxShadow = `0px 3px 100px red`;
+        displayEl.style.boxShadow = `0px 3px 100px red`;
         setTimeout(function() {
             lightbulbEl.style.backgroundColor = "yellow";
             lightbulbEl.style.backgroundImage = "radial-gradient(yellow, white)";
             lightbulbEl.style.boxShadow = "";
+            lightboardEl.style.boxShadow = `0px 3px 40px red`;
+            gameEl.style.boxShadow = `0px 3px 40px red`;
+            displayEl.style.boxShadow = `0px 3px 40px red`;
         }, 500);
     }, 1000)
 
