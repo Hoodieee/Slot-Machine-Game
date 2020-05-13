@@ -17,8 +17,14 @@ const messageEl = document.getElementById('message');
 const slotEl = document.querySelectorAll(".slot");
 const listenBet = document.getElementById('bet');
 const listenSpin = document.getElementById('spin');
-const listenLine = document.getElementById('playline')
-const listenMaxBet = document.getElementById('maxbet')
+const listenLine = document.getElementById('playline');
+const listenMaxBet = document.getElementById('maxbet');
+const topConsoleEl = document.getElementById("top-console");
+const lightboardEl = document.getElementById('lightboard');
+const gameEl = document.getElementById('game');
+const displayEl = document.getElementById('display');
+const lightbulbEl = document.getElementById('lightbulb')
+const pullbarEl = document.getElementById('pullbar');
 
 
 
@@ -29,6 +35,8 @@ listenBet.addEventListener('click', betting)
 listenSpin.addEventListener('click', spin);
 listenLine.addEventListener('click', addLine)
 listenMaxBet.addEventListener('click', maxBet)
+pullbarEl.addEventListener('mousedown', barDown);
+pullbarEl.addEventListener('mouseup', barUp);
 
 
 // lookup images by index value
@@ -509,13 +517,15 @@ function displayMessage(msg) { // displays win messages
 function displayJackpot() {
     messageEl.style.fontSize = '30px';
     messageEl.innerText = "JACKPOT WIN";
-    setTimeout(removeMessage, 5000);
+    setTimeout(removeMessage, 6000);
 }
 function stopListen() {
     listenBet.removeEventListener('click', betting);
     listenSpin.removeEventListener('click', spin);
     listenLine.removeEventListener('click', addLine);
     listenMaxBet.removeEventListener('click', maxBet);
+    pullbarEl.removeEventListener('mousedown', barDown);
+    pullbarEl.removeEventListener('mouseup', barUp);
 }
 
 function startListen() {
@@ -523,6 +533,8 @@ function startListen() {
     listenSpin.addEventListener('click', spin);
     listenLine.addEventListener('click', addLine)
     listenMaxBet.addEventListener('click', maxBet)
+    pullbarEl.addEventListener('mousedown', barDown);
+    pullbarEl.addEventListener('mouseup', barUp);
 }
 
 function removeHighlight() {
@@ -534,4 +546,101 @@ function removeHighlight() {
 function removeMessage() {
     messageEl.style.fontSize = '20px';
     messageEl.innerHTML = `Lucky &nbsp;<img src="https://i.imgur.com/tKmPe3f.png">&nbsp;'s`;
+}
+
+function topConsoleDisplay() {
+    const jpTop = setInterval (function() {
+            topConsoleEl.innerHTML = "JACKPOT WIN";
+            topConsoleEl.style.fontSize = "60px";
+        setTimeout(function() {
+            topConsoleEl.innerHTML = "JACKPOT WIN";
+            topConsoleEl.style.fontSize = "50px";
+        }, 500);
+    }, 1000)
+
+    setTimeout(function() {
+        clearInterval(jpTop);
+        setTimeout(function() {
+            topConsoleEl.innerHTML = `Lucky &nbsp;<img src="https://i.imgur.com/tKmPe3f.png">&nbsp;'s`;
+            topConsoleEl.style.fontSize= "50px";          
+        }, 500);
+    }, 6000)
+}
+
+function changeBorder() {
+    const borderInt = setInterval (function() {
+        let r = Math.floor((Math.random() * 254) + 1);
+        let g = Math.floor((Math.random() * 254) + 1);
+        let b = Math.floor((Math.random() * 254) + 1);
+        let newColor = `rgb(${r}, ${g}, ${b})`;
+        console.log(newColor);
+        lightboardEl.style.border = `8px solid ${newColor}`;
+        lightboardEl.style.boxShadow = `0px 3px 40px ${newColor}`;
+        gameEl.style.border = `8px solid ${newColor}`;
+        gameEl.style.boxShadow = `0px 3px 40px ${newColor}`;
+        displayEl.style.border = `8px solid ${newColor}`;
+        displayEl.style.boxShadow = `0px 3px 40px ${newColor}`;
+        lightbulbEl.style.borderTop = `3px solid ${newColor}`;
+        lightbulbEl.style.borderLeft = `3px solid ${newColor}`;
+        lightbulbEl.style.borderRight = `3px solid ${newColor}`;
+        lightbulbEl.style.boxShadow = `0px 3px 40px ${newColor}`;
+        lightbulbEl.style.backgroundColor = `${newColor}`;
+        lightbulbEl.style.backgroundImage = `radial-gradient(white, ${newColor})`;
+
+    }, 200);
+    setTimeout(function() {
+        clearInterval(borderInt);
+        lightboardEl.style.border = `8px solid red`;
+        lightboardEl.style.boxShadow = `0px 3px 40px white`;
+        gameEl.style.border = `8px solid red`;
+        gameEl.style.boxShadow = `0px 3px 40px white`;
+        displayEl.style.border = `8px solid red`;
+        displayEl.style.boxShadow = `0px 3px 40px white`;
+        lightbulbEl.style.borderTop = `3px solid black`;
+        lightbulbEl.style.borderLeft = `3px solid black`;
+        lightbulbEl.style.borderRight = `3px solid black`;
+        lightbulbEl.style.boxShadow = `0px 3px 40px white`;
+        lightbulbEl.style.backgroundColor = `yellow`;
+        lightbulbEl.style.backgroundImage = `radial-gradient(white, yellow)`;
+    },6000)
+
+}
+
+function jpAnimation() {
+    displayJackpot();
+    topConsoleDisplay();
+    changeBorder();
+}
+
+function barDown() {
+    pullbarEl.innerHTML = '<img src="https://i.imgur.com/LV3qIO1.png">'
+    
+}
+
+function barUp() {
+    pullbarEl.innerHTML = '<img src="https://i.imgur.com/UQkRMsH.png">'
+    spin();
+}
+
+function winAnimation(){
+
+    const lightChange = setInterval (function() {
+        lightbulbEl.style.backgroundColor = "white";
+        lightbulbEl.style.backgroundImage = "radial-gradient(white, yellow)";
+        lightbulbEl.style.boxShadow = "0 3px 100px yellow";
+        setTimeout(function() {
+            lightbulbEl.style.backgroundColor = "yellow";
+            lightbulbEl.style.backgroundImage = "radial-gradient(yellow, white)";
+            lightbulbEl.style.boxShadow = "";
+        }, 500);
+    }, 1000)
+
+    setTimeout(function() {
+        clearInterval(lightChange);
+        setTimeout(function() {
+        lightbulbEl.style.backgroundColor = "yellow";
+        lightbulbEl.style.backgroundImage = "radial-gradient(yellow, white)";
+        lightbulbEl.style.boxShadow = "";      
+        }, 500);
+    }, 6000)
 }

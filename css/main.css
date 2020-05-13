@@ -4,9 +4,9 @@ body{
     background-repeat: no-repeat;
     background-size: cover;
     display: grid;
-    grid-template-columns: auto 40px 600px 40px auto;
+    grid-template-columns: 0 650px 0;
     grid-template-rows: 100%;
-    grid-template-areas: ". . slot-machine . .";
+    grid-template-areas: ". slot-machine .";
     justify-content: center;
     align-items: center;
 
@@ -30,8 +30,8 @@ body{
     border-top: 3px solid black;
     border-left: 3px solid black;
     border-right: 3px solid black;
-    background-color: white;
-    background-image: radial-gradient(white, yellow);
+    background-color: yellow;
+    background-image: radial-gradient(yellow, white);
     
 }
 
@@ -93,14 +93,30 @@ body{
     border-bottom: 5px solid gray;
     display: flex;
     flex-wrap: wrap;
-    height: 28%;
+    height: 100%;
     width: 450px;
     align-content: center;
     justify-content: space-around;;
 }
-
+#middle{
+    display:flex;
+    flex-wrap: wrap;
+    justify-content: center;
+    align-items: center;
+    height: 28%;
+    width: 100%;
+}
 #game img {
     width: 100%;
+    height: 100%;
+}
+.side{
+    width: 70px;
+    height: 100%;
+}
+
+#pullbar img{
+    width: 60px;
     height: 100%;
 }
 #message-display {
