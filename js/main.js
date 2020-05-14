@@ -25,8 +25,8 @@ const gameEl = document.getElementById('game');
 const displayEl = document.getElementById('display');
 const lightbulbEl = document.getElementById('lightbulb')
 const pullbarEl = document.getElementById('pullbar');
-
-
+const shadeEl = document.getElementById('gray11');
+const slotElevenEl = document.getElementById('slot-eleven');
 
 
 
@@ -86,7 +86,7 @@ function init() {
     bet = 1;
     win = 0;
     winAmt = 0;
-    balance = 50;
+    balance = 1000;
     playLine = 1;
     totalBet = 0;
     displayBalance();
@@ -263,6 +263,7 @@ function displayLines() {
 function displayTotalBet() {
     totalBet = bet * playLine;
     divTotal.innerText= `${totalBet}`;
+    totalBet === 45 ? unshade() : shade() ;
 }
 
 
@@ -699,3 +700,14 @@ function winAnimation(){ // regular win animation
         }, 500);
     }, 6000)
 }
+
+function unshade() {
+    shadeEl.style.backgroundColor = "transparent";
+    slotElevenEl.style.border= "3px solid blue";
+}
+function shade() {
+    shadeEl.style.backgroundColor = "rgba(117, 114, 114, .8)";
+    slotElevenEl.style.border= "";
+}
+
+
