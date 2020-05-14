@@ -1,4 +1,4 @@
-//Global Variables
+//-----Global Variables
 let bet;
 let balance;
 let win;
@@ -8,7 +8,7 @@ let playLine;
 let timeMult;
 
 
-//Cached Elements
+//-----Cached Audio files
 const bgSound = new Audio("audio/bgSound.wav");
 const payoutSound = new Audio("audio/payout.wav");
 const jackpotSound = new Audio("audio/jackpot.mp3");
@@ -19,6 +19,7 @@ const stopSound = new Audio("audio/stop.wav");
 const betSound = new Audio("audio/bet.wav");
 const paylineSound = new Audio("audio/payline.wav");
 
+//-----Cached Elements
 const divLines = document.getElementById('play-lines');
 const divBalance = document.getElementById('credits-balance');
 const divBetAmt = document.getElementById('bet-amount');
@@ -38,10 +39,6 @@ const pullbarEl = document.getElementById('pullbar');
 const shadeEl = document.getElementById('gray11');
 const slotElevenEl = document.getElementById('slot-eleven');
 
-
-
-
-
 //Event Listeners
 listenBet.addEventListener('click', betting)
 listenSpin.addEventListener('click', spin);
@@ -50,11 +47,9 @@ listenMaxBet.addEventListener('click', maxBet)
 pullbarEl.addEventListener('mousedown', barDown);
 pullbarEl.addEventListener('mouseup', barUp);
 
-
-
-// lookup images by index value
-const imagesLookup =
-    ["https://i.imgur.com/6Ts68im.jpg",
+// Array to lookup image files by index value
+const imagesLookup =[
+    "https://i.imgur.com/6Ts68im.jpg",
     "https://i.imgur.com/YI8snM7.jpg",
     "https://i.imgur.com/iZIom8z.jpg",
     "https://i.imgur.com/3txHJ7q.jpg",
@@ -88,10 +83,12 @@ const payoutLookup =[ 1, 5, 10, 20, 50, 100, 2, 5, 1, 1, 1]; // 2,5,1,1,1 are mu
 const checks= [middleAcross, topAcross, bottomAcross, diagonalOne, diagonalTwo, zigZagOne, zigZagTwo, zigZagThree, zigZagFour];
 
 init();
+
 function newGame() {
     init();
 }
 
+// Initializes the slot machine with the default values
 function init() {
     bet = 1;
     win = 0;
@@ -105,7 +102,7 @@ function init() {
     displayTotalBet();
     removeMessage();
 }
-// Assigns bet amount and display- called by eventListener
+// Assigns bet amount and display it-- called by eventListener
 function betting() {
     (bet < 5) ? bet++ : bet =1;
     betSound.play();
@@ -114,7 +111,7 @@ function betting() {
 }
 // Assigns number of lines to play- called by evenListener
 function addLine() {
-    (playLine < 9) ? playLine++ : playLine = 1;
+    (playLine < 9) ? playLine++ : playLine = 1; // prevents user from playing more than 9 paylines
     paylineSound.play();
     displayLines();
     displayTotalBet(); 
@@ -126,12 +123,12 @@ function maxBet() {
     displayBet();
     displayLines();
     displayTotalBet();
-    removeHighlight();
-    removeMessage();
+    removeHighlight(); //removes highlighted red boxes
+    removeMessage(); //clears out message with original logo
     spin();
 }
 
-function imgOneGen(){ // displays an image on slot 1 depending on the value of imgOne
+function imgOneGen(){ // displays an image on slot depending on the value of imgOne
     imgOne.value = Math.floor(Math.random() * 6)
     displayImg(imgOne);
 }
@@ -184,7 +181,7 @@ function imgTwelveGen(){
 }
 
 
-function scrollOne() {
+function scrollOne() { // scroll function randomizes and stops according to interval and timeout per column
     const scrollTimerOne= setInterval(function() {
         imgOneGen();
         imgTwoGen();
@@ -234,11 +231,11 @@ function scrollFour() {
 }
 
 function spin() {
-    if(balance === 0){
+    if(balance === 0){ // if the palyer has a "0" balance and tries to spin again, display message and reveal a play again button
         messageEl.innerHTML= 'Game Over<button id="newgame">Play Again</button>'
         document.getElementById("newgame").addEventListener('click', init);
         return;
-    } else if (balance - totalBet < 0){
+    } else if (balance - totalBet < 0){ // prevents the player from betting more than balance
         messageEl.innerHTML= "Insufficient funds";
         return;
     }
@@ -246,29 +243,21 @@ function spin() {
         spinSound.play();
         removeHighlight();
         removeMessage();
-        stopListen();
+        stopListen(); // game buttons stop listening
         scrollOne();
         scrollTwo();
         scrollThree();
         scrollFour();
         win = 0;
-        for (let i = 0; i < 10; i++){
+        for (let i = 0; i < 10; i++){ // resets checkTiming array to null for new round
             checkTiming[i] = null;
         }
         balance -= totalBet;
         displayBalance();
         displayTotalBet();
         setTimeout(checkWin, 4000);
-        setTimeout(startListen, 4000);
+        setTimeout(startListen, 4000); // allows game buttons to start listening again
     }
-}
-
-
-function checkBalance() {
-    if (balance - totalBet < 0){
-        messageEl.innerText= "Insufficient funds";
-    }
-    return balanceCheck = true;
 }
 
 function displayBalance() {
@@ -283,17 +272,15 @@ function displayLines() {
 function displayTotalBet() {
     totalBet = bet * playLine;
     divTotal.innerText= `${totalBet}`;
-    totalBet === 45 ? unshade() : shade() ;
+    totalBet === 45 ? unshade() : shade() ; // max bet allows bonus multiplier feature
 }
 
 
-
 const checkTiming =[null,null,null,null,null,null,null,null,null,null]; //stores a win at a index and then uses the index number to multiply the delay time
-
-
+//checkTiming array is being used to spread out and coordinate the timing of the display Message and the win animations
 
 function middleAcross() { // middle row straight across
-    timeMult = checkTiming.indexOf(null);
+    timeMult = checkTiming.indexOf(null); // check checkTiming for null to see if there are another winners. Null = no winner
     if (imgTwo.value === imgFive.value && imgFive.value === imgEight.value){ 
         if(bet === 5 && imgTwo.value === 5 && imgEleven.value === 8){
             winAmt = payoutLookup[imgTwo.value] * 1500;
@@ -311,17 +298,15 @@ function middleAcross() { // middle row straight across
                 winAnimation();
             }
             highlightWin(imgTwo, imgFive, imgEight, imgEleven);
-        }, 4000 * timeMult);
-        checkTiming[timeMult] = 1;
+        }, 4000 * timeMult); // multiply 4000 ms by index number of first null
+        checkTiming[timeMult] = 1; //replace the value at the index of the null to 1 so that the next null will be at the next index number.
     } else {
         return ;
     } 
-        console.log("middleacross");
-        console.log(`checktiming: ${checkTiming[timeMult]}`);
 }
 
 function topAcross() { //top row straight across
-    timeMult = checkTiming.indexOf(null); // check checkTiming for null to see if there are another winners. Null = no winner
+    timeMult = checkTiming.indexOf(null); 
     if (imgOne.value === imgFour.value && imgFour.value === imgSeven.value){ 
         if(bet === 5 && imgOne.value === 5 && imgEleven.value === 8){ 
             winAmt = payoutLookup[imgTwo.value] * 1500;
@@ -339,14 +324,13 @@ function topAcross() { //top row straight across
                 winAnimation();
             }
             highlightWin(imgOne, imgFour, imgSeven, imgEleven);
-        }, 4000 * timeMult); // multiply 4000 ms by index number of first null
-        checkTiming[timeMult] = 1; //replace the value at the index of the null to 1 so that the next null will be at the next index number.
+        }, 4000 * timeMult); 
+        checkTiming[timeMult] = 1; 
     } else {
         return;
     }
-        console.log("topacross");
-        console.log(`checktiming: ${checkTiming[timeMult]}`);
-}  
+} 
+
 function bottomAcross() { // bottom row straight across
     timeMult = checkTiming.indexOf(null);
     if (imgThree.value === imgSix.value && imgSix.value === imgNine.value){ 
@@ -371,10 +355,8 @@ function bottomAcross() { // bottom row straight across
     } else {
         return ;
     }
-        console.log("bottomacross");
-        console.log(`checktiming: ${checkTiming[timeMult]}`);
-
 }
+
 function diagonalOne() { // diagonal top left to bottom right
     timeMult = checkTiming.indexOf(null);
     if (imgOne.value === imgFive.value && imgFive.value === imgNine.value){ 
@@ -399,10 +381,8 @@ function diagonalOne() { // diagonal top left to bottom right
     } else {
         return;
     }
-        console.log("diaOne");
-        console.log(`checktiming: ${checkTiming[timeMult]}`);
-
 }
+
 function diagonalTwo() { // diagonal bottom lect to to top right
     timeMult = checkTiming.indexOf(null);
     if (imgThree.value === imgFive.value && imgFive.value === imgSeven.value){ 
@@ -427,9 +407,8 @@ function diagonalTwo() { // diagonal bottom lect to to top right
     } else {
         return;
     }
-        console.log("dia2");
-        console.log(`checktiming: ${checkTiming[timeMult]}`);
 }
+
 function zigZagOne() { // zig zag bot -> mid -> bot
     timeMult = checkTiming.indexOf(null);
     if (imgOne.value === imgFive.value && imgFive.value === imgSeven.value){ // zig zag top
@@ -454,9 +433,8 @@ function zigZagOne() { // zig zag bot -> mid -> bot
     } else {
         return;
     }
-        console.log("zig1");
-        console.log(`checktiming: ${checkTiming[timeMult]}`);
 }
+
 function zigZagTwo() { // zig zag top -> mid -> top
     timeMult = checkTiming.indexOf(null);
     if (imgThree.value === imgFive.value && imgFive.value === imgNine.value){ // zig zag bottom
@@ -481,9 +459,8 @@ function zigZagTwo() { // zig zag top -> mid -> top
     } else {
         return;
     }
-        console.log("zigTwo");
-        console.log(`checktiming: ${checkTiming[timeMult]}`);
 }
+
 function zigZagThree() {// zig zag mid -> top -> mid
     timeMult = checkTiming.indexOf(null);
     if (imgTwo.value === imgFour.value && imgFour.value === imgEight.value){ 
@@ -508,9 +485,8 @@ function zigZagThree() {// zig zag mid -> top -> mid
     } else {
         return;
     }        
-        console.log("zig3");
-        console.log(`checktiming: ${checkTiming[timeMult]}`);
 }
+
 function zigZagFour() { // zigzag mid -> bot -> mid
     timeMult = checkTiming.indexOf(null); 
     if (imgTwo.value === imgSix.value && imgSix.value === imgEight.value){ // zig zag bottom
@@ -535,11 +511,9 @@ function zigZagFour() { // zigzag mid -> bot -> mid
     } else {
         return;
     }
-        console.log("zig4");
-        console.log(`checktiming: ${checkTiming[timeMult]}`);
 }
 
-function checkWin () {
+function checkWin () { // add winAmt to accumulator "win" from all playlines 
     for (let i = 0; i< playLine; i++){
         checks[i]();
         win += winAmt ;
@@ -549,7 +523,7 @@ function checkWin () {
     displayBalance();
 }
 
-function highlightWin(slotOne, slotTwo, slotThree, slotFour) { // highlights the winning slots with a red border
+function highlightWin(slotOne, slotTwo, slotThree, slotFour) { // highlights the winning slots with a red border for each pay line
     setTimeout(function() {
         document.getElementById(`${slotOne.location}`).style.border = "5px solid red";
     }, 250);
@@ -573,8 +547,6 @@ function highlightWin(slotOne, slotTwo, slotThree, slotFour) { // highlights the
     }, 4000); //clears the highlights after 4 seconds
  
 }
-
-
     
 function displayImg(img) { // function to show images in slots
     document.getElementById(`${img.location}`).src = imagesLookup[img.value];
@@ -583,14 +555,14 @@ function displayImg(img) { // function to show images in slots
 function displayMessage(msg) { // displays win messages
     messageEl.style.fontSize = '15px';
     messageEl.innerText = msg;
-    
-
 }
+
 function displayJackpot() { // displays jackpot message on the middle console under the scrolls
     messageEl.style.fontSize = '30px';
     messageEl.innerText = "JACKPOT WIN";
 }
-function stopListen() { // turns off event listeners used to prevent multiple spins in between scrolls
+
+function stopListen() { // turns off event listeners. Used to prevent multiple spins in between scrolls
     listenBet.removeEventListener('click', betting);
     listenSpin.removeEventListener('click', spin);
     listenLine.removeEventListener('click', addLine);
@@ -608,18 +580,18 @@ function startListen() { // turns on event listeners to listen for next bet,spin
     pullbarEl.addEventListener('mouseup', barUp);
 }
 
-function removeHighlight() { //clears out the red border highlights if player presses spin before message finishes rendering
+function removeHighlight() { //clears out the red border highlights
     for (let i = 0; i< slotEl.length; i++){
     slotEl[i].style.border= "";
     }
 }
 
-function removeMessage() {
+function removeMessage() { // clears out the message display and change back to game logo
     messageEl.style.fontSize = '20px';
     messageEl.innerHTML = `Lucky &nbsp;<img src="https://i.imgur.com/tKmPe3f.png">&nbsp;'s`;
 }
 
-function topConsoleDisplay() {
+function topConsoleDisplay() { // function used to display message on top display for Jackpot
     const jpTop = setInterval (function() {
             topConsoleEl.innerHTML = "JACKPOT WIN";
             topConsoleEl.style.fontSize = "60px";
@@ -628,7 +600,6 @@ function topConsoleDisplay() {
             topConsoleEl.style.fontSize = "50px";
         }, 500);
     }, 1000)
-
     setTimeout(function() {
         clearInterval(jpTop);
         setTimeout(function() {
@@ -657,7 +628,6 @@ function changeBorder() { // changes the color of the borders as part of the jac
         lightbulbEl.style.boxShadow = `0px 3px 100px ${newColor}`;
         lightbulbEl.style.backgroundColor = `${newColor}`;
         lightbulbEl.style.backgroundImage = `radial-gradient(white, ${newColor})`;
-
     }, 200);
     setTimeout(function() {
         clearInterval(borderInt);
@@ -674,7 +644,6 @@ function changeBorder() { // changes the color of the borders as part of the jac
         lightbulbEl.style.backgroundColor = `yellow`;
         lightbulbEl.style.backgroundImage = `radial-gradient(white, yellow)`;
     },6000)
-
 }
 
 function jpAnimation() { // runs jackpot animation
@@ -712,7 +681,6 @@ function winAnimation(){ // regular win animation
             displayEl.style.boxShadow = `0px 3px 40px red`;
         }, 500);
     }, 1000)
-
     setTimeout(function() {
         clearInterval(lightChange);
         setTimeout(function() {
@@ -723,11 +691,12 @@ function winAnimation(){ // regular win animation
     }, 6000)
 }
 
-function unshade() {
+function unshade() { // unshades the bonus box 
     shadeEl.style.backgroundColor = "transparent";
     slotElevenEl.style.border= "3px solid blue";
 }
-function shade() {
+
+function shade() { //shades the whole bonus column
     shadeEl.style.backgroundColor = "rgba(117, 114, 114, .8)";
     slotElevenEl.style.border= "";
 }
