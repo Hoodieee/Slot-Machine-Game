@@ -44,32 +44,32 @@ pullbarEl.addEventListener('mouseup', barUp);
 
 // lookup images by index value
 const imagesLookup =
-    ['<img src="https://i.imgur.com/6Ts68im.jpg">',
-    '<img src="https://i.imgur.com/YI8snM7.jpg">',
-    '<img src="https://i.imgur.com/iZIom8z.jpg">',
-    '<img src="https://i.imgur.com/3txHJ7q.jpg">',
-    '<img src="https://i.imgur.com/QXB5wUJ.jpg">',
-    '<img src="https://i.imgur.com/b6DgvoY.jpg">',
-    '<img src="https://i.imgur.com/HTrVlD7.jpg">',
-    '<img src="https://i.imgur.com/6SAON7s.jpg">',
-    '<img src="https://i.imgur.com/QyZNaNu.jpg">',
-    '<img src="https://i.imgur.com/5Er6hxm.jpg">',
-    '<img src="https://i.imgur.com/5Er6hxm.jpg">'
+    ["https://i.imgur.com/6Ts68im.jpg",
+    "https://i.imgur.com/YI8snM7.jpg",
+    "https://i.imgur.com/iZIom8z.jpg",
+    "https://i.imgur.com/3txHJ7q.jpg",
+    "https://i.imgur.com/QXB5wUJ.jpg",
+    "https://i.imgur.com/b6DgvoY.jpg",
+    "https://i.imgur.com/HTrVlD7.jpg",
+    "https://i.imgur.com/6SAON7s.jpg",
+    "https://i.imgur.com/QyZNaNu.jpg",
+    "https://i.imgur.com/5Er6hxm.jpg",
+    "https://i.imgur.com/5Er6hxm.jpg"
 ];
 
 // Objects to hold values for each Image slot
-const imgOne = {location: 'slot-one', value: 0};
-const imgTwo = {location: 'slot-two', value: 0};
-const imgThree = {location: 'slot-three', value: 0};
-const imgFour = {location: 'slot-four', value: 0};
-const imgFive = {location: 'slot-five', value: 0};
-const imgSix = {location: 'slot-six', value: 0};
-const imgSeven = {location: 'slot-seven', value: 0};
-const imgEight = {location: 'slot-eight', value: 0};
-const imgNine = {location: 'slot-nine', value: 0};
-const imgTen = {location: 'slot-ten', value: 0};
-const imgEleven = {location: 'slot-eleven', value: 0};
-const imgTwelve = {location: 'slot-twelve', value: 0};
+const imgOne = {location: 'imageone', value: 0};
+const imgTwo = {location: 'imagetwo', value: 0};
+const imgThree = {location: 'imagethree', value: 0};
+const imgFour = {location: 'imagefour', value: 0};
+const imgFive = {location: 'imagefive', value: 0};
+const imgSix = {location: 'imagesix', value: 0};
+const imgSeven = {location: 'imageseven', value: 0};
+const imgEight = {location: 'imageeight', value: 0};
+const imgNine = {location: 'imagenine', value: 0};
+const imgTen = {location: 'imageten', value: 0};
+const imgEleven = {location: 'imageeleven', value: 0};
+const imgTwelve = {location: 'imagetwelve', value: 0};
 
 // Array for payout lookup by index(index number is same as image number)
 const payoutLookup =[ 1, 5, 10, 20, 50, 100, 2, 5, 1, 1, 1]; // 2,5,1,1,1 are multipliers
@@ -543,7 +543,7 @@ function highlightWin(slotOne, slotTwo, slotThree, slotFour) { // highlights the
         document.getElementById(`${slotThree.location}`).style.border = "5px solid red";
     }, 750);
 
-    if (slotFour.value !== 1 || bet !== 5){
+    if (totalBet === 45){
         setTimeout(function(){
             document.getElementById(`${slotFour.location}`).style.border = "5px solid red";
         }, 1000);
@@ -560,7 +560,7 @@ function highlightWin(slotOne, slotTwo, slotThree, slotFour) { // highlights the
 
     
 function displayImg(img) { // function to show images in slots
-    document.getElementById(`${img.location}`).innerHTML = imagesLookup[img.value];
+    document.getElementById(`${img.location}`).src = imagesLookup[img.value];
 }
 
 function displayMessage(msg) { // displays win messages
