@@ -44,14 +44,13 @@ body{
     display: flex;
     flex-direction: column;
     justify-content: center;
-    background-color: rgb(243, 140, 140);
-    background-image: radial-gradient(rgb(243,140,140), white);
+    background-image: url(https://i.imgur.com/fknfBQD.jpg);
 }
 
 #top-console{
     font-family: 'Bungee Inline', cursive;
     color: red;
-    text-shadow: 2px 3px 2px white;
+    text-shadow: 3px 8px 6px black;
     display: flex;
     grid-area: console;
     text-align: center;

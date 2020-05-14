@@ -158,14 +158,17 @@ function imgNineGen(){
 function imgTenGen(){ 
     imgTen.value = Math.floor(Math.random() * 5) + 6;
     displayImg(imgTen);
+    totalBet === 45 ? unshade() : shade() ;
 }
 function imgElevenGen(){ 
     imgEleven.value = Math.floor(Math.random() * 5) + 6;
     displayImg(imgEleven);
+    totalBet === 45 ? unshade() : shade() ;
 }
 function imgTwelveGen(){ 
     imgTwelve.value = Math.floor(Math.random() * 5) + 6;
     displayImg(imgTwelve);
+    totalBet === 45 ? unshade() : shade() ;
 }
 
 
