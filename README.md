@@ -11,7 +11,7 @@ ENJOY!
 
 ## Screenshot
 
-![Slot Machine Game Screenshot](https://i.imgur.com/q0RlMT9.jpg)
+![Slot Machine Game Screenshot](https://i.imgur.com/vBle83u.jpg)
 
 ## Technologies used
 * HTML
@@ -20,7 +20,7 @@ ENJOY!
 
 ## Getting Started
 
-To play this game, click [https://i.imgur.com/w0x7rDA.jpg]()
+To play this game, click [here](https://hoodieee.github.io/Slot-Machine-Game/)
 
 ### Instructions:
 

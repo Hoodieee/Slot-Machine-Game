@@ -9,6 +9,16 @@ let timeMult;
 
 
 //Cached Elements
+const bgSound = new Audio("audio/bgSound.wav");
+const payoutSound = new Audio("audio/payout.wav");
+const jackpotSound = new Audio("audio/jackpot.mp3");
+const spinSound = new Audio("audio/spin.wav");
+const winSound = new Audio("audio/win.wav");
+const pullSound = new Audio("audio/handle.wav");
+const stopSound = new Audio("audio/stop.wav");
+const betSound = new Audio("audio/bet.wav");
+const paylineSound = new Audio("audio/payline.wav");
+
 const divLines = document.getElementById('play-lines');
 const divBalance = document.getElementById('credits-balance');
 const divBetAmt = document.getElementById('bet-amount');
@@ -98,12 +108,14 @@ function init() {
 // Assigns bet amount and display- called by eventListener
 function betting() {
     (bet < 5) ? bet++ : bet =1;
+    betSound.play();
     displayBet();
     displayTotalBet(); // update new total bet
 }
 // Assigns number of lines to play- called by evenListener
 function addLine() {
     (playLine < 9) ? playLine++ : playLine = 1;
+    paylineSound.play();
     displayLines();
     displayTotalBet(); 
 }
@@ -180,6 +192,7 @@ function scrollOne() {
     }, 60);
     setTimeout(function(){
         clearInterval(scrollTimerOne);
+        stopSound.play();
     }, 2000);    
 }
 
@@ -191,6 +204,7 @@ function scrollTwo() {
     }, 50);
     setTimeout(function(){
         clearInterval(scrollTimerTwo);
+        stopSound.play();
     }, 2500);
 }
 
@@ -202,6 +216,7 @@ function scrollThree() {
     }, 40);
     setTimeout(function(){
         clearInterval(scrollTimerThree);
+        stopSound.play();
     }, 3000);
     
 }
@@ -213,6 +228,7 @@ function scrollFour() {
     }, 40);
     setTimeout(function(){
         clearInterval(scrollTimerFour);
+        stopSound.play();
     }, 3500);
     
 }
@@ -227,6 +243,7 @@ function spin() {
         return;
     }
     else{
+        spinSound.play();
         removeHighlight();
         removeMessage();
         stopListen();
@@ -566,6 +583,7 @@ function displayImg(img) { // function to show images in slots
 function displayMessage(msg) { // displays win messages
     messageEl.style.fontSize = '15px';
     messageEl.innerText = msg;
+    
 
 }
 function displayJackpot() { // displays jackpot message on the middle console under the scrolls
@@ -660,6 +678,7 @@ function changeBorder() { // changes the color of the borders as part of the jac
 }
 
 function jpAnimation() { // runs jackpot animation
+    jackpotSound.play();
     displayJackpot();
     topConsoleDisplay();
     changeBorder();
@@ -667,7 +686,7 @@ function jpAnimation() { // runs jackpot animation
 
 function barDown() { // pulls bar down on mouse down
     pullbarEl.innerHTML = '<img src="https://i.imgur.com/LV3qIO1.png">'
-    
+    pullSound.play();
 }
 
 function barUp() { // brings bar back up and spins slots on mouse up 
@@ -676,7 +695,7 @@ function barUp() { // brings bar back up and spins slots on mouse up
 }
 
 function winAnimation(){ // regular win animation
-
+    payoutSound.play();
     const lightChange = setInterval (function() {
         lightbulbEl.style.backgroundColor = "white";
         lightbulbEl.style.backgroundImage = "radial-gradient(white, yellow)";
