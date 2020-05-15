@@ -208,6 +208,16 @@ button:hover{
     background-color: red;
     color: white;
 }
+#infobutton{
+    height: 5px;
+    width: 5px;
+    font: 10px;
+}
+#buttoninfo{
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
 #bottom{
     display: flex;
     width: 500px;
