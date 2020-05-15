@@ -83,10 +83,6 @@ const checks= [middleAcross, topAcross, bottomAcross, diagonalOne, diagonalTwo, 
 
 init();
 
-function newGame() {
-    init();
-}
-
 // Initializes the slot machine with the default values
 function init() {
     bet = 1;
@@ -635,7 +631,6 @@ function changeBorder() { // changes the color of the borders as part of the jac
         let g = Math.floor((Math.random() * 254) + 1);
         let b = Math.floor((Math.random() * 254) + 1);
         let newColor = `rgb(${r}, ${g}, ${b})`;
-        console.log(newColor);
         lightboardEl.style.border = `8px solid ${newColor}`;
         lightboardEl.style.boxShadow = `0px 3px 100px ${newColor}`;
         gameEl.style.border = `8px solid ${newColor}`;
@@ -722,3 +717,6 @@ function shade() { //shades the whole bonus column
 }
 
 
+function newGame() {
+    init();
+}

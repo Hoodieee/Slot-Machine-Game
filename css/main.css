@@ -330,3 +330,6 @@ audio{
     width: 500px;
     height: 60px;
 }
+#infobtn{
+    border-radius: 15%;
+}
