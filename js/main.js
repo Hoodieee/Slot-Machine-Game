@@ -525,18 +525,18 @@ function checkWin () { // add winAmt to accumulator "win" from all playlines
 
 function highlightWin(slotOne, slotTwo, slotThree, slotFour) { // highlights the winning slots with a red border for each pay line
     setTimeout(function() {
-        document.getElementById(`${slotOne.location}`).style.border = "5px solid red";
+        document.getElementById(`${slotOne.location}`).style.border = "3px solid red";
     }, 250);
     setTimeout(function(){
-        document.getElementById(`${slotTwo.location}`).style.border = "5px solid red";
+        document.getElementById(`${slotTwo.location}`).style.border = "3px solid red";
     }, 500);
     setTimeout(function(){
-        document.getElementById(`${slotThree.location}`).style.border = "5px solid red";
+        document.getElementById(`${slotThree.location}`).style.border = "3px solid red";
     }, 750);
 
     if (totalBet === 45){
         setTimeout(function(){
-            document.getElementById(`${slotFour.location}`).style.border = "5px solid red";
+            document.getElementById(`${slotFour.location}`).style.border = "3px solid red";
         }, 1000);
     }
     setTimeout(function() {

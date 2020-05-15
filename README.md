@@ -44,6 +44,9 @@ To play this game, click [here](https://hoodieee.github.io/Slot-Machine-Game/)
 * Line 9 : Zig Zag from middle left, bottom, middle right
 
 ### Payouts(per 1 credit):
+
+![Payout Table](https://i.imgur.com/7MAfXzT.jpg)  
+
 * 3 Grapes in a row: 1 credit
 * 3 Cherries in a row: 5 credits
 * 3 Oranges in a row: 10 credits
