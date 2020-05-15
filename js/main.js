@@ -7,7 +7,6 @@ let totalBet;
 let playLine;
 let timeMult;
 
-
 //-----Cached Audio files
 const bgSound = new Audio("audio/bgSound.wav");
 const payoutSound = new Audio("audio/payout.wav");
@@ -102,6 +101,7 @@ function init() {
     displayTotalBet();
     removeMessage();
 }
+
 // Assigns bet amount and display it-- called by eventListener
 function betting() {
     (bet < 5) ? bet++ : bet =1;
@@ -109,6 +109,7 @@ function betting() {
     displayBet();
     displayTotalBet(); // update new total bet
 }
+
 // Assigns number of lines to play- called by evenListener
 function addLine() {
     (playLine < 9) ? playLine++ : playLine = 1; // prevents user from playing more than 9 paylines
@@ -116,6 +117,7 @@ function addLine() {
     displayLines();
     displayTotalBet(); 
 }
+
 // Sets max bet and max lines and spins the slots
 function maxBet() {
     bet = 5;
@@ -132,54 +134,64 @@ function imgOneGen(){ // displays an image on slot depending on the value of img
     imgOne.value = Math.floor(Math.random() * 6)
     displayImg(imgOne);
 }
+
 function imgTwoGen(){ 
     imgTwo.value = Math.floor(Math.random() * 6)
     displayImg(imgTwo);
 }
+
 function imgThreeGen(){ 
     imgThree.value = Math.floor(Math.random() * 6)
     displayImg(imgThree);
 }
+
 function imgFourGen(){ 
     imgFour.value = Math.floor(Math.random() * 6)
     displayImg(imgFour);
 }
+
 function imgFiveGen(){ 
     imgFive.value = Math.floor(Math.random() * 6)
     displayImg(imgFive);
 }
+
 function imgSixGen(){ 
     imgSix.value = Math.floor(Math.random() * 6)
     displayImg(imgSix);
 }
+
 function imgSevenGen(){ 
     imgSeven.value = Math.floor(Math.random() * 6)
     displayImg(imgSeven);
 }
+
 function imgEightGen(){ 
     imgEight.value = Math.floor(Math.random() * 6)
     displayImg(imgEight);
 }
+
 function imgNineGen(){ 
     imgNine.value = Math.floor(Math.random() * 6)
     displayImg(imgNine);
 }
+
 function imgTenGen(){ 
     imgTen.value = Math.floor(Math.random() * 5) + 6;
     displayImg(imgTen);
     totalBet === 45 ? unshade() : shade() ;
 }
+
 function imgElevenGen(){ 
     imgEleven.value = Math.floor(Math.random() * 5) + 6;
     displayImg(imgEleven);
     totalBet === 45 ? unshade() : shade() ;
 }
+
 function imgTwelveGen(){ 
     imgTwelve.value = Math.floor(Math.random() * 5) + 6;
     displayImg(imgTwelve);
     totalBet === 45 ? unshade() : shade() ;
 }
-
 
 function scrollOne() { // scroll function randomizes and stops according to interval and timeout per column
     const scrollTimerOne= setInterval(function() {
@@ -214,9 +226,9 @@ function scrollThree() {
     setTimeout(function(){
         clearInterval(scrollTimerThree);
         stopSound.play();
-    }, 3000);
-    
+    }, 3000);   
 }
+
 function scrollFour() {
     const scrollTimerFour= setInterval(function() {
         imgTenGen();
@@ -226,8 +238,7 @@ function scrollFour() {
     setTimeout(function(){
         clearInterval(scrollTimerFour);
         stopSound.play();
-    }, 3500);
-    
+    }, 3500); 
 }
 
 function spin() {
@@ -263,27 +274,30 @@ function spin() {
 function displayBalance() {
     divBalance.innerText= `${balance}`;
 }
+
 function displayBet() {
     divBetAmt.innerText= `${bet}`;
 }
+
 function displayLines() {
     divLines.innerText= `${playLine}`;
 }
+
 function displayTotalBet() {
     totalBet = bet * playLine;
     divTotal.innerText= `${totalBet}`;
     totalBet === 45 ? unshade() : shade() ; // max bet allows bonus multiplier feature
 }
 
-
+// checkTiming array is being used to spread out and coordinate the timing of the display Message and the win animations
 const checkTiming =[null,null,null,null,null,null,null,null,null,null]; //stores a win at a index and then uses the index number to multiply the delay time
-//checkTiming array is being used to spread out and coordinate the timing of the display Message and the win animations
 
 function middleAcross() { // middle row straight across
     timeMult = checkTiming.indexOf(null); // check checkTiming for null to see if there are another winners. Null = no winner
     if (imgTwo.value === imgFive.value && imgFive.value === imgEight.value){ 
         if(bet === 5 && imgTwo.value === 5 && imgEleven.value === 8){
             winAmt = payoutLookup[imgTwo.value] * 1500;
+            checkTiming[timeMult + 1] = 1; 
         }else if(bet === 5) {
             winAmt = payoutLookup[imgTwo.value] * payoutLookup[imgEleven.value] * bet;
         }else if(bet < 5){
@@ -310,6 +324,7 @@ function topAcross() { //top row straight across
     if (imgOne.value === imgFour.value && imgFour.value === imgSeven.value){ 
         if(bet === 5 && imgOne.value === 5 && imgEleven.value === 8){ 
             winAmt = payoutLookup[imgTwo.value] * 1500;
+            checkTiming[timeMult + 1] = 1; 
         }else if(bet === 5) {
             winAmt = payoutLookup[imgOne.value] * payoutLookup[imgEleven.value] * bet;
         }else if(bet < 5){
@@ -336,6 +351,7 @@ function bottomAcross() { // bottom row straight across
     if (imgThree.value === imgSix.value && imgSix.value === imgNine.value){ 
         if(bet === 5 && imgThree.value === 5 && imgEleven.value === 8){
             winAmt = payoutLookup[imgThree.value] * 1500;
+            checkTiming[timeMult + 1] = 1; 
         }else if(bet === 5) {
             winAmt = payoutLookup[imgThree.value] * payoutLookup[imgEleven.value] * bet;
         }else if(bet < 5){
@@ -362,6 +378,7 @@ function diagonalOne() { // diagonal top left to bottom right
     if (imgOne.value === imgFive.value && imgFive.value === imgNine.value){ 
         if(bet === 5 && imgOne.value === 5 && imgEleven.value === 8){
             winAmt = payoutLookup[imgOne.value] * 1500;
+            checkTiming[timeMult + 1] = 1; 
         }else if(bet === 5) {
             winAmt = payoutLookup[imgOne.value] * payoutLookup[imgEleven.value] * bet;
         }else if(bet < 5){
@@ -388,6 +405,7 @@ function diagonalTwo() { // diagonal bottom lect to to top right
     if (imgThree.value === imgFive.value && imgFive.value === imgSeven.value){ 
         if(bet === 5 && imgThree.value === 5 && imgEleven.value === 8){
             winAmt = payoutLookup[imgThree.value] * 1500
+            checkTiming[timeMult + 1] = 1; 
         }else if(bet === 5) {
             winAmt = payoutLookup[imgThree.value] * payoutLookup[imgEleven.value] * bet;
         }else if(bet < 5){
@@ -414,6 +432,7 @@ function zigZagOne() { // zig zag bot -> mid -> bot
     if (imgOne.value === imgFive.value && imgFive.value === imgSeven.value){ // zig zag top
         if(bet === 5 && imgOne.value === 5 && imgEleven.value === 8){
             winAmt = payoutLookup[imgOne.value] * 1500;
+            checkTiming[timeMult + 1] = 1; 
         }else if(bet === 5) {
             winAmt = payoutLookup[imgOne.value] * payoutLookup[imgEleven.value] * bet;
         }else if(bet < 5){
@@ -440,6 +459,7 @@ function zigZagTwo() { // zig zag top -> mid -> top
     if (imgThree.value === imgFive.value && imgFive.value === imgNine.value){ // zig zag bottom
         if(bet === 5 && imgThree.value === 5 && imgEleven.value === 8){
             winAmt = payoutLookup[imgThree.value] * 1500;
+            checkTiming[timeMult + 1] = 1; 
         }else if(bet === 5) {
             winAmt = payoutLookup[imgThree.value] * payoutLookup[imgEleven.value] * bet;
         }else if(bet < 5){
@@ -466,6 +486,7 @@ function zigZagThree() {// zig zag mid -> top -> mid
     if (imgTwo.value === imgFour.value && imgFour.value === imgEight.value){ 
         if(bet === 5 && imgTwo.value === 5 && imgEleven.value === 8){
             winAmt = payoutLookup[imgTwo.value] * 1500;
+            checkTiming[timeMult + 1] = 1; 
         }else if(bet === 5) {
             winAmt = payoutLookup[imgTwo.value] * payoutLookup[imgEleven.value] * bet;
         }else if(bet < 5){
@@ -492,6 +513,7 @@ function zigZagFour() { // zigzag mid -> bot -> mid
     if (imgTwo.value === imgSix.value && imgSix.value === imgEight.value){ // zig zag bottom
         if(bet === 5 && imgTwo.value === 5 && imgEleven.value === 8){
             winAmt = payoutLookup[imgTwo.value] * 1500;
+            checkTiming[timeMult + 1] = 1; 
         }else if(bet === 5) {
             winAmt = payoutLookup[imgTwo.value] * payoutLookup[imgEleven.value] * bet;
         }else if(bet < 5){
@@ -546,7 +568,6 @@ function highlightWin(slotOne, slotTwo, slotThree, slotFour) { // highlights the
         document.getElementById(`${slotThree.location}`).style.border = "";
         document.getElementById(`${slotFour.location}`).style.border = "";
     }, 4000); //clears the highlights after 4 seconds
- 
 }
     
 function displayImg(img) { // function to show images in slots
@@ -644,14 +665,7 @@ function changeBorder() { // changes the color of the borders as part of the jac
         lightbulbEl.style.boxShadow = `0px 3px 40px white`;
         lightbulbEl.style.backgroundColor = `yellow`;
         lightbulbEl.style.backgroundImage = `radial-gradient(white, yellow)`;
-    },6000)
-}
-
-function jpAnimation() { // runs jackpot animation
-    jackpotSound.play();
-    displayJackpot();
-    topConsoleDisplay();
-    changeBorder();
+    },7000)
 }
 
 function barDown() { // pulls bar down on mouse down
@@ -662,6 +676,13 @@ function barDown() { // pulls bar down on mouse down
 function barUp() { // brings bar back up and spins slots on mouse up 
     pullbarEl.innerHTML = '<img src="https://i.imgur.com/UQkRMsH.png">'
     spin();
+}
+
+function jpAnimation() { // runs jackpot animation
+    jackpotSound.play();
+    displayJackpot();
+    topConsoleDisplay();
+    changeBorder();
 }
 
 function winAnimation(){ // regular win animation
