@@ -249,14 +249,14 @@ function spin() {
         scrollThree();
         scrollFour();
         win = 0;
-        for (let i = 0; i < 10; i++){ // resets checkTiming array to null for new round
-            checkTiming[i] = null;
-        }
+        delayMultiplier = timeMult + 1;
         balance -= totalBet;
         displayBalance();
         displayTotalBet();
-        setTimeout(checkWin, 4000);
-        setTimeout(startListen, 4000); // allows game buttons to start listening again
+        setTimeout(checkWin, 3500);
+        for (let i = 0; i < 10; i++){ // resets checkTiming array to null for new round
+            checkTiming[i] = null;
+        }
     }
 }
 
@@ -514,13 +514,14 @@ function zigZagFour() { // zigzag mid -> bot -> mid
 }
 
 function checkWin () { // add winAmt to accumulator "win" from all playlines 
-    for (let i = 0; i< playLine; i++){
-        checks[i]();
-        win += winAmt ;
-        winAmt = 0;
-    }
-    balance += win;
-    displayBalance();
+for (let i = 0; i< playLine; i++){
+    checks[i]();
+    win += winAmt ;
+    winAmt = 0;
+}
+setTimeout(startListen, checkTiming.indexOf(null) * 3500); // allows game buttons to start listening again
+balance += win;
+displayBalance();
 }
 
 function highlightWin(slotOne, slotTwo, slotThree, slotFour) { // highlights the winning slots with a red border for each pay line
@@ -676,9 +677,9 @@ function winAnimation(){ // regular win animation
             lightbulbEl.style.backgroundColor = "yellow";
             lightbulbEl.style.backgroundImage = "radial-gradient(yellow, white)";
             lightbulbEl.style.boxShadow = "";
-            lightboardEl.style.boxShadow = `0px 3px 40px red`;
-            gameEl.style.boxShadow = `0px 3px 40px red`;
-            displayEl.style.boxShadow = `0px 3px 40px red`;
+            lightboardEl.style.boxShadow = `0px 3px 40px white`;
+            gameEl.style.boxShadow = `0px 3px 40px white`;
+            displayEl.style.boxShadow = `0px 3px 40px white`;
         }, 500);
     }, 1000)
     setTimeout(function() {
@@ -688,7 +689,7 @@ function winAnimation(){ // regular win animation
         lightbulbEl.style.backgroundImage = "radial-gradient(yellow, white)";
         lightbulbEl.style.boxShadow = "";      
         }, 500);
-    }, 6000)
+    }, 4000)
 }
 
 function unshade() { // unshades the bonus box 
