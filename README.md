@@ -59,3 +59,4 @@ Jackpot win is 750,000 credits
 
 ## Next Steps
 * Add a bonus free spin option in the near future.
+* Responsive layout
