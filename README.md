@@ -20,7 +20,7 @@ ENJOY!
 
 ## Getting Started
 
-To play this game, click [here](https://hoodieee.github.io/Slot-Machine-Game/)
+To play this game, click [here](https://jsohnfile.github.io/Slot-Machine-Game/)
 
 ### Instructions:
 
