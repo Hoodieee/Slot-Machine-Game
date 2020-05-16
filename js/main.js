@@ -290,7 +290,7 @@ function middleAcross() { // middle row straight across
     timeMult = checkTiming.indexOf(null); // check checkTiming for null to see if there are another winners. Null = no winner
     if (imgTwo.value === imgFive.value && imgFive.value === imgEight.value){ 
         if(bet === 5 && imgTwo.value === 5 && imgEleven.value === 8){
-            winAmt = payoutLookup[imgTwo.value] * 1500;
+            winAmt = payoutLookup[imgTwo.value] * 1500 * bet;
             checkTiming[timeMult + 1] = 1; 
         }else if(bet === 5) {
             winAmt = payoutLookup[imgTwo.value] * payoutLookup[imgEleven.value] * bet;
@@ -317,7 +317,7 @@ function topAcross() { //top row straight across
     timeMult = checkTiming.indexOf(null); 
     if (imgOne.value === imgFour.value && imgFour.value === imgSeven.value){ 
         if(bet === 5 && imgOne.value === 5 && imgEleven.value === 8){ 
-            winAmt = payoutLookup[imgTwo.value] * 1500;
+            winAmt = payoutLookup[imgTwo.value] * 1500 * bet;
             checkTiming[timeMult + 1] = 1; 
         }else if(bet === 5) {
             winAmt = payoutLookup[imgOne.value] * payoutLookup[imgEleven.value] * bet;
@@ -344,7 +344,7 @@ function bottomAcross() { // bottom row straight across
     timeMult = checkTiming.indexOf(null);
     if (imgThree.value === imgSix.value && imgSix.value === imgNine.value){ 
         if(bet === 5 && imgThree.value === 5 && imgEleven.value === 8){
-            winAmt = payoutLookup[imgThree.value] * 1500;
+            winAmt = payoutLookup[imgThree.value] * 1500 * bet;
             checkTiming[timeMult + 1] = 1; 
         }else if(bet === 5) {
             winAmt = payoutLookup[imgThree.value] * payoutLookup[imgEleven.value] * bet;
@@ -371,7 +371,7 @@ function diagonalOne() { // diagonal top left to bottom right
     timeMult = checkTiming.indexOf(null);
     if (imgOne.value === imgFive.value && imgFive.value === imgNine.value){ 
         if(bet === 5 && imgOne.value === 5 && imgEleven.value === 8){
-            winAmt = payoutLookup[imgOne.value] * 1500;
+            winAmt = payoutLookup[imgOne.value] * 1500 * bet;
             checkTiming[timeMult + 1] = 1; 
         }else if(bet === 5) {
             winAmt = payoutLookup[imgOne.value] * payoutLookup[imgEleven.value] * bet;
@@ -398,7 +398,7 @@ function diagonalTwo() { // diagonal bottom left to to top right
     timeMult = checkTiming.indexOf(null);
     if (imgThree.value === imgFive.value && imgFive.value === imgSeven.value){ 
         if(bet === 5 && imgThree.value === 5 && imgEleven.value === 8){
-            winAmt = payoutLookup[imgThree.value] * 1500
+            winAmt = payoutLookup[imgThree.value] * 1500 * bet;
             checkTiming[timeMult + 1] = 1; 
         }else if(bet === 5) {
             winAmt = payoutLookup[imgThree.value] * payoutLookup[imgEleven.value] * bet;
@@ -425,7 +425,7 @@ function zigZagOne() { // zig zag top -> mid -> top
     timeMult = checkTiming.indexOf(null);
     if (imgOne.value === imgFive.value && imgFive.value === imgSeven.value){ 
         if(bet === 5 && imgOne.value === 5 && imgEleven.value === 8){
-            winAmt = payoutLookup[imgOne.value] * 1500;
+            winAmt = payoutLookup[imgOne.value] * 1500 * bet;
             checkTiming[timeMult + 1] = 1; 
         }else if(bet === 5) {
             winAmt = payoutLookup[imgOne.value] * payoutLookup[imgEleven.value] * bet;
@@ -452,7 +452,7 @@ function zigZagTwo() { // zig zag bot -> mid -> bot
     timeMult = checkTiming.indexOf(null);
     if (imgThree.value === imgFive.value && imgFive.value === imgNine.value){ 
         if(bet === 5 && imgThree.value === 5 && imgEleven.value === 8){
-            winAmt = payoutLookup[imgThree.value] * 1500;
+            winAmt = payoutLookup[imgThree.value] * 1500 * bet;
             checkTiming[timeMult + 1] = 1; 
         }else if(bet === 5) {
             winAmt = payoutLookup[imgThree.value] * payoutLookup[imgEleven.value] * bet;
@@ -479,7 +479,7 @@ function zigZagThree() {// zig zag mid -> top -> mid
     timeMult = checkTiming.indexOf(null);
     if (imgTwo.value === imgFour.value && imgFour.value === imgEight.value){ 
         if(bet === 5 && imgTwo.value === 5 && imgEleven.value === 8){
-            winAmt = payoutLookup[imgTwo.value] * 1500;
+            winAmt = payoutLookup[imgTwo.value] * 1500 * bet;
             checkTiming[timeMult + 1] = 1; 
         }else if(bet === 5) {
             winAmt = payoutLookup[imgTwo.value] * payoutLookup[imgEleven.value] * bet;
@@ -506,7 +506,7 @@ function zigZagFour() { // zigzag mid -> bot -> mid
     timeMult = checkTiming.indexOf(null); 
     if (imgTwo.value === imgSix.value && imgSix.value === imgEight.value){ 
         if(bet === 5 && imgTwo.value === 5 && imgEleven.value === 8){
-            winAmt = payoutLookup[imgTwo.value] * 1500;
+            winAmt = payoutLookup[imgTwo.value] * 1500 * bet;
             checkTiming[timeMult + 1] = 1; 
         }else if(bet === 5) {
             winAmt = payoutLookup[imgTwo.value] * payoutLookup[imgEleven.value] * bet;
