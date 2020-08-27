@@ -124,78 +124,22 @@ function maxBet() {
     spin();
 }
 
-function imgOneGen(){ 
-    imgOne.value = randomImageGen();
-    displayImg(imgOne);
-}
-
-function imgTwoGen(){ 
-    imgTwo.value = randomImageGen();
-    displayImg(imgTwo);
-}
-
-function imgThreeGen(){ 
-    imgThree.value = randomImageGen();
-    displayImg(imgThree);
-}
-
-function imgFourGen(){ 
-    imgFour.value = randomImageGen();
-    displayImg(imgFour);
-}
-
-function imgFiveGen(){ 
-    imgFive.value = randomImageGen();
-    displayImg(imgFive);
-}
-
-function imgSixGen(){ 
-    imgSix.value = randomImageGen();
-    displayImg(imgSix);
-}
-
-function imgSevenGen(){ 
-    imgSeven.value = randomImageGen();
-    displayImg(imgSeven);
-}
-
-function imgEightGen(){ 
-    imgEight.value = randomImageGen();
-    displayImg(imgEight);
-}
-
-function imgNineGen(){ 
-    imgNine.value = randomImageGen();
-    displayImg(imgNine);
-}
-
-function imgTenGen(){ 
-    imgTen.value = Math.floor(Math.random() * 5) + 6;
-    displayImg(imgTen);
-    totalBet === 45 ? unshade() : shade() ;
-}
-
-function imgElevenGen(){ 
-    imgEleven.value = Math.floor(Math.random() * 5) + 6;
-    displayImg(imgEleven);
-    totalBet === 45 ? unshade() : shade() ;
-}
-
-function imgTwelveGen(){ 
-    imgTwelve.value = Math.floor(Math.random() * 5) + 6;
-    displayImg(imgTwelve);
-    totalBet === 45 ? unshade() : shade() ;
-}
-
 function randomImageGen(){
     return Math.floor(Math.random() * 6)
 }
 
+function randomBonusGen(){
+    return Math.floor(Math.floor(Math.random() * 5) + 6);
+}
+
 function scrollOne() { 
     const scrollTimerOne= setInterval(function() {
-        imgOneGen();
-        imgTwoGen();
-        imgThreeGen();
+        imgOne.value = randomImageGen();
+        displayImg(imgOne);
+        imgTwo.value = randomImageGen();
+        displayImg(imgTwo);
+        imgThree.value = randomImageGen();
+        displayImg(imgThree);
     }, 60);
     setTimeout(function(){
         clearInterval(scrollTimerOne);
@@ -205,9 +149,12 @@ function scrollOne() {
 
 function scrollTwo() {
     const scrollTimerTwo= setInterval(function() {
-        imgFourGen();
-        imgFiveGen();
-        imgSixGen();
+        imgFour.value = randomImageGen();
+        displayImg(imgFour);
+        imgFive.value = randomImageGen();
+        displayImg(imgFive);
+        imgSix.value = randomImageGen();
+        displayImg(imgSix);
     }, 50);
     setTimeout(function(){
         clearInterval(scrollTimerTwo);
@@ -217,9 +164,12 @@ function scrollTwo() {
 
 function scrollThree() {
     const scrollTimerThree= setInterval(function() {
-        imgSevenGen();
-        imgEightGen();
-        imgNineGen();
+        imgSeven.value = randomImageGen();
+        displayImg(imgSeven);
+        imgEight.value = randomImageGen();
+        displayImg(imgEight);
+        imgNine.value = randomImageGen();
+        displayImg(imgNine);
     }, 40);
     setTimeout(function(){
         clearInterval(scrollTimerThree);
@@ -229,9 +179,13 @@ function scrollThree() {
 
 function scrollFour() {
     const scrollTimerFour= setInterval(function() {
-        imgTenGen();
-        imgElevenGen();
-        imgTwelveGen();
+        totalBet === 45 ? unshade() : shade() ;
+        imgTen.value = randomBonusGen();
+        displayImg(imgTen);
+        imgEleven.value = randomBonusGen();
+        displayImg(imgEleven);
+        imgTwelve.value = randomBonusGen();
+        displayImg(imgTwelve);
     }, 40);
     setTimeout(function(){
         clearInterval(scrollTimerFour);
