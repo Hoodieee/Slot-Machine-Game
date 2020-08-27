@@ -24,6 +24,7 @@ To play this game, click [here](https://jsohnfile.github.io/Slot-Machine-Game/)
 
 ### Instructions:
 
+
 1. Press the "BET" button to increase the total amount you would like to play per line(5 credits max).
 2. Press the "LINES" button to increase the total number of lines you would like to play.
 3. Once the bet amount and number of lines have been selected, press the "SPIN" button or click on the handle with the red ball.

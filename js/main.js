@@ -125,47 +125,47 @@ function maxBet() {
 }
 
 function imgOneGen(){ 
-    imgOne.value = Math.floor(Math.random() * 6)
+    imgOne.value = randomImageGen();
     displayImg(imgOne);
 }
 
 function imgTwoGen(){ 
-    imgTwo.value = Math.floor(Math.random() * 6)
+    imgTwo.value = randomImageGen();
     displayImg(imgTwo);
 }
 
 function imgThreeGen(){ 
-    imgThree.value = Math.floor(Math.random() * 6)
+    imgThree.value = randomImageGen();
     displayImg(imgThree);
 }
 
 function imgFourGen(){ 
-    imgFour.value = Math.floor(Math.random() * 6)
+    imgFour.value = randomImageGen();
     displayImg(imgFour);
 }
 
 function imgFiveGen(){ 
-    imgFive.value = Math.floor(Math.random() * 6)
+    imgFive.value = randomImageGen();
     displayImg(imgFive);
 }
 
 function imgSixGen(){ 
-    imgSix.value = Math.floor(Math.random() * 6)
+    imgSix.value = randomImageGen();
     displayImg(imgSix);
 }
 
 function imgSevenGen(){ 
-    imgSeven.value = Math.floor(Math.random() * 6)
+    imgSeven.value = randomImageGen();
     displayImg(imgSeven);
 }
 
 function imgEightGen(){ 
-    imgEight.value = Math.floor(Math.random() * 6)
+    imgEight.value = randomImageGen();
     displayImg(imgEight);
 }
 
 function imgNineGen(){ 
-    imgNine.value = Math.floor(Math.random() * 6)
+    imgNine.value = randomImageGen();
     displayImg(imgNine);
 }
 
@@ -185,6 +185,10 @@ function imgTwelveGen(){
     imgTwelve.value = Math.floor(Math.random() * 5) + 6;
     displayImg(imgTwelve);
     totalBet === 45 ? unshade() : shade() ;
+}
+
+function randomImageGen(){
+    return Math.floor(Math.random() * 6)
 }
 
 function scrollOne() { 
